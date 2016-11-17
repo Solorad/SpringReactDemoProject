@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Version;
 
 /**
- * Created by solorad on 15.11.16.
+ * Created by emorenkov on 15.11.16.
  */
 @Data
 @Entity
