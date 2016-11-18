@@ -1,6 +1,8 @@
 package com.morenkov.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -13,6 +15,8 @@ import java.util.Arrays;
  * @author emorenkov
  */
 @Entity
+@Data
+@ToString(exclude = "password")
 public class Manager {
 
 	public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
@@ -28,51 +32,12 @@ public class Manager {
 		this.password = PASSWORD_ENCODER.encode(password);
 	}
 
-	protected Manager() {}
+	public Manager() {}
 
 	public Manager(String name, String password, String... roles) {
 
 		this.name = name;
 		this.setPassword(password);
 		this.roles = roles;
-	}
-
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String[] getRoles() {
-		return roles;
-	}
-
-	public void setRoles(String[] roles) {
-		this.roles = roles;
-	}
-
-
-	@Override
-	public String toString() {
-		return "Manager{" +
-			   "id=" + id +
-			   ", name='" + name + '\'' +
-			   ", roles=" + Arrays.toString(roles) +
-			   '}';
 	}
 }
