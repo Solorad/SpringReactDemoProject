@@ -1,14 +1,13 @@
 package com.morenkov.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.Arrays;
 
 /**
  * @author emorenkov
@@ -23,7 +22,6 @@ public class Manager {
 	private String name;
 
 	private @JsonIgnore String password;
-
 	private String[] roles;
 
 	public void setPassword(String password) {
@@ -66,5 +64,15 @@ public class Manager {
 
 	public void setRoles(String[] roles) {
 		this.roles = roles;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Manager{" +
+			   "id=" + id +
+			   ", name='" + name + '\'' +
+			   ", roles=" + Arrays.toString(roles) +
+			   '}';
 	}
 }
