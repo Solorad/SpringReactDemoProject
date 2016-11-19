@@ -52,6 +52,7 @@ class App extends React.Component {
                 return employeeCollection;
             });
         }).then(employeeCollection => {
+            this.page = employeeCollection.entity.page;
             return employeeCollection.entity._embedded.employees.map(employee =>
                 client({
                     method: 'GET',
@@ -122,6 +123,7 @@ class App extends React.Component {
             path: navUri
         }).then(employeeCollection => {
             this.links = employeeCollection.entity._links;
+            this.page = employeeCollection.entity.page;
 
             return employeeCollection.entity._embedded.employees.map(employee =>
                 client({
@@ -133,6 +135,7 @@ class App extends React.Component {
             return when.all(employeePromises);
         }).done(employees => {
             this.setState({
+                page: this.page,
                 employees: employees,
                 attributes: Object.keys(this.schema.properties),
                 pageSize: this.state.pageSize,
@@ -203,7 +206,8 @@ class App extends React.Component {
         return (
             <div>
                 <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-                <EmployeeList employees={this.state.employees}
+                <EmployeeList page={this.state.page}
+                              employees={this.state.employees}
                               links={this.state.links}
                               pageSize={this.state.pageSize}
                               attributes={this.state.attributes}
@@ -351,6 +355,9 @@ class EmployeeList extends React.Component {
         this.props.onNavigate(this.props.links.last.href);
     }
     render() {
+        var pageInfo = this.props.page.hasOwnProperty("number") ?
+            <h3>Employees - Page {this.props.page.number + 1} of {this.props.page.totalPages}</h3> : null;
+
         var employees = this.props.employees.map(employee =>
             <Employee key={employee.entity._links.self.href}
                       employee={employee}
@@ -375,6 +382,7 @@ class EmployeeList extends React.Component {
 
         return (
             <div>
+                {pageInfo}
                 <input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
                 <table>
                     <tbody>
@@ -382,6 +390,7 @@ class EmployeeList extends React.Component {
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Description</th>
+                        <th>Manager</th>
                         <th></th>
                         <th></th>
                     </tr>
