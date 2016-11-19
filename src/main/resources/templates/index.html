@@ -3,9 +3,18 @@
 <head lang="en">
     <meta charset="UTF-8"/>
     <title>ReactJS + Spring Data REST</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="Book Corner"/>
+    <meta name="author" content="Morenkov Evgenii"/>
+
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
+
+<div th:replace="fragments/header :: header"></div>
+
 <div>
     Hello, <span th:text="${#authentication.name}">user</span>.
     <form th:action="@{/logout}" method="post">

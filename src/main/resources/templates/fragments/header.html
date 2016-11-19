@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Morenkov demo page</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content="Book Corner"/>
+    <meta name="author" content="Morenkov Evgenii"/>
+
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/main.css" />
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar navbar-fixed-top bg-inverse navbar-dark" th:fragment="header">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Book store</a>
+        </div>
+
+        <div>
+                <ul class="nav navbar-nav">
+                    <li class="nav-item">
+                        <a href="books" class="nav-link">Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="popular" class="nav-link">Popular books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="search" class="nav-link">Search</a>
+                    </li>
+                </ul>
+            <ul class="nav nav-pills pull-xs-right">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-warning-outline">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
