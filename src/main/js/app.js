@@ -383,7 +383,7 @@ class EmployeeList extends React.Component {
             <div>
                 {pageInfo}
                 <input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
-                <table class="table">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -421,6 +421,7 @@ class Employee extends React.Component {
     render() {
         return (
             <tr>
+                <td></td>
                 <td>{this.props.employee.entity.firstName}</td>
                 <td>{this.props.employee.entity.lastName}</td>
                 <td>{this.props.employee.entity.description}</td>
