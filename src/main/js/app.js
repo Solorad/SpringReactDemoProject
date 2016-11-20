@@ -204,7 +204,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div class="container-fluid">
                 <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
                 <EmployeeList page={this.state.page}
                               employees={this.state.employees}
@@ -265,8 +265,7 @@ class CreateDialog extends React.Component {
             </div>
         )
     }
-};
-// end::create-dialog[]
+}
 
 class UpdateDialog extends React.Component {
 
@@ -384,16 +383,19 @@ class EmployeeList extends React.Component {
             <div>
                 {pageInfo}
                 <input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
-                <table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Description</th>
+                            <th>Year</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Description</th>
-                        <th>Manager</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
                     {employees}
                     </tbody>
                 </table>
