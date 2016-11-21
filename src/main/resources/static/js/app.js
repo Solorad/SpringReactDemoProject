@@ -3,10 +3,9 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const when = require('when');
-const client = require('./client');
-var stompClient = require('./websocket-listener');
-
-const follow = require('./follow'); // function to hop multiple links by "rel"
+const client = require('./util/client');
+var stompClient = require('./util/websocket-listener');
+const follow = require('./util/follow'); // function to hop multiple links by "rel"
 
 const root = '/api';
 
@@ -204,7 +203,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div class="container-fluid">
+            <div className="container-fluid">
                 <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
                 <EmployeeList page={this.state.page}
                               employees={this.state.employees}
@@ -324,17 +323,6 @@ class EmployeeList extends React.Component {
         this.handleNavPrev = this.handleNavPrev.bind(this);
         this.handleNavNext = this.handleNavNext.bind(this);
         this.handleNavLast = this.handleNavLast.bind(this);
-        this.handleInput = this.handleInput.bind(this);
-    }
-
-    handleInput(e) {
-        e.preventDefault();
-        var pageSize = ReactDOM.findDOMNode(this.refs.pageSize).value;
-        if (/^[0-9]+$/.test(pageSize)) {
-            this.props.updatePageSize(pageSize);
-        } else {
-            ReactDOM.findDOMNode(this.refs.pageSize).value = pageSize.substring(0, pageSize.length - 1);
-        }
     }
 
     handleNavFirst(e){
@@ -355,7 +343,7 @@ class EmployeeList extends React.Component {
     }
     render() {
         var pageInfo = this.props.page.hasOwnProperty("number") ?
-            <h3>Employees - Page {this.props.page.number + 1} of {this.props.page.totalPages}</h3> : null;
+            <h3>Books - Page {this.props.page.number + 1} of {this.props.page.totalPages}</h3> : null;
 
         var employees = this.props.employees.map(employee =>
             <Employee key={employee.entity._links.self.href}
@@ -381,29 +369,65 @@ class EmployeeList extends React.Component {
 
         return (
             <div>
-                {pageInfo}
-                <input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Description</th>
-                            <th>Year</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {employees}
-                    </tbody>
-                </table>
-                <div>
+                <div className="row">
+                    <div className="col-md-3">{pageInfo}</div>
+                    <SelectItemsPerPage pageSize={this.props.pageSize}
+                                        updatePageSize={this.props.updatePageSize}/>
+                </div>
+                <div className="row">
+                    <div className="col-md-8">
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Description</th>
+                                <th>Year</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {employees}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div className="row">
                     {navLinks}
                 </div>
             </div>
         )
+    }
+}
+
+class SelectItemsPerPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleInput = this.handleInput.bind(this);
+    }
+
+    handleInput(e) {
+        e.preventDefault();
+        var pageSize = ReactDOM.findDOMNode(this.refs.pageSize).value;
+        if (/^[0-9]+$/.test(pageSize)) {
+            this.props.updatePageSize(pageSize);
+        } else {
+            ReactDOM.findDOMNode(this.refs.pageSize).value = pageSize.substring(0, pageSize.length - 1);
+        }
+    }
+
+    render() {
+        return <div className="col-md-1 col-md-offset-4">
+            <select ref="pageSize" defaultValue={this.props.pageSize} onChange={this.handleInput}>
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">7</option>
+                <option value="15">10</option>
+            </select>
+        </div>
     }
 }
 
