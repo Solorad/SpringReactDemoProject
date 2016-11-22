@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Arrays;
 
 /**
  * @author emorenkov
@@ -21,7 +20,7 @@ public class Manager {
 
 	public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-	private @Id @GeneratedValue Long id;
+	private @Id @GeneratedValue String id;
 
 	private String name;
 
