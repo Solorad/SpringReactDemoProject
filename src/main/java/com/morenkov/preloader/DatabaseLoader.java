@@ -1,56 +1,52 @@
 package com.morenkov.preloader;
 
 import com.morenkov.entity.Employee;
-import com.morenkov.entity.Manager;
 import com.morenkov.repository.EmployeeRepository;
-import com.morenkov.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author emorenkov
  */
 @Component
-public class DatabaseLoader /*implements CommandLineRunner*/ {
+public class DatabaseLoader implements CommandLineRunner {
 
-	private final EmployeeRepository employees;
-	private final ManagerRepository managers;
+    private final EmployeeRepository employeeRepository;
 
-	@Autowired
-	public DatabaseLoader(EmployeeRepository employeeRepository,
-						  ManagerRepository managerRepository) {
+    @Autowired
+    public DatabaseLoader(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
-		this.employees = employeeRepository;
-		this.managers = managerRepository;
-	}
+    @Override
+    public void run(String... strings) throws Exception {
+        Set<String> adminRoles = new HashSet<>();
+        adminRoles.add("ROLE_USER");
+        adminRoles.add("ROLE_ADMIN");
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("admin", "doesn't matter",
+                        AuthorityUtils.createAuthorityList("ROLE_ADMIN")));
+        Employee greg = employeeRepository.save(new Employee("Greg", "Malkovich", adminRoles, null, "123456"));
+        Employee admin = employeeRepository.save(new Employee("admin", "The boss", adminRoles, null, "admin"));
 
-//	@Override
-	public void run(String... strings) throws Exception {
 
-		Manager greg = this.managers.save(new Manager("greg", "turnquist",
-				"ROLE_MANAGER"));
-		Manager oliver = this.managers.save(new Manager("oliver", "gierke",
-				"ROLE_MANAGER"));
+        Set<String> userRoles = new HashSet<>();
+        adminRoles.add("ROLE_USER");
+        this.employeeRepository.save(new Employee("Anatoly", "Vasserman", userRoles, greg.getId(), "12"));
+        this.employeeRepository.save(new Employee("Jaene", "Proudmoure", userRoles, greg.getId(), "12"));
+        this.employeeRepository.save(new Employee("Kell", "Talas", userRoles, greg.getId(), "12"));
 
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken("greg", "doesn't matter",
-						AuthorityUtils.createAuthorityList("ROLE_MANAGER")));
+        this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
+        this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
+        this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
 
-		this.employees.save(new Employee("Frodo", "Baggins", "ring bearer", greg));
-		this.employees.save(new Employee("Bilbo", "Baggins", "burglar", greg));
-		this.employees.save(new Employee("Gandalf", "the Grey", "wizard", greg));
-
-		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken("oliver", "doesn't matter",
-						AuthorityUtils.createAuthorityList("ROLE_MANAGER")));
-
-		this.employees.save(new Employee("Samwise", "Gamgee", "gardener", oliver));
-		this.employees.save(new Employee("Merry", "Brandybuck", "pony rider", oliver));
-		this.employees.save(new Employee("Peregrin", "Took", "pipe smoker", oliver));
-
-		SecurityContextHolder.clearContext();
-	}
+        SecurityContextHolder.clearContext();
+    }
 }

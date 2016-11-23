@@ -2,34 +2,56 @@ package com.morenkov.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * Created by emorenkov on 15.11.16.
  */
 @Data
-@Entity
+@ToString(exclude = "password")
 public class Employee {
-    private @Id @GeneratedValue String id;
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+
+    @Id
+    private String id;
     private String firstName;
     private String lastName;
-    private String description;
+    private Set<String> roles;
+    private String manager;
+    @JsonIgnore
+    private String password;
+    @Version
+    @JsonIgnore
+    private Long version;
 
-    private @Version @JsonIgnore Long version;
+    private Employee() {
+    }
 
-    private @ManyToOne Manager manager;
-
-    private Employee() {}
-
-    public Employee(String firstName, String lastName, String description, Manager manager) {
+    public Employee(String firstName, String lastName, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.description = description;
+        this.setPassword(password);
+        roles = new HashSet<>();
+        roles.add("ROLE_USER");
+    }
+
+    public Employee(String firstName, String lastName, Set<String> roles, String manager, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.roles = roles;
         this.manager = manager;
+        this.setPassword(password);
+    }
+
+    public void setPassword(String password) {
+        this.password = PASSWORD_ENCODER.encode(password);
     }
 }
