@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * Created by emorenkov on 15.11.16.
  */
 @PreAuthorize("hasRole('ROLE_MANAGER')")
-@RepositoryRestResource(collectionResourceRel = "employee", path = "employee")
+@RepositoryRestResource(collectionResourceRel = "employee", path = "employees")
 public interface EmployeeRepository extends MongoRepository<Employee, String> {
 
     @Override

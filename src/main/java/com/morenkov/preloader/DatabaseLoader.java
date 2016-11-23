@@ -5,7 +5,6 @@ import com.morenkov.entity.Manager;
 import com.morenkov.repository.EmployeeRepository;
 import com.morenkov.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @author emorenkov
  */
 @Component
-public class DatabaseLoader implements CommandLineRunner {
+public class DatabaseLoader /*implements CommandLineRunner*/ {
 
 	private final EmployeeRepository employees;
 	private final ManagerRepository managers;
@@ -28,7 +27,7 @@ public class DatabaseLoader implements CommandLineRunner {
 		this.managers = managerRepository;
 	}
 
-	@Override
+//	@Override
 	public void run(String... strings) throws Exception {
 
 		Manager greg = this.managers.save(new Manager("greg", "turnquist",
