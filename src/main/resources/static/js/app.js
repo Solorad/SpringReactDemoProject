@@ -207,8 +207,11 @@ class App extends React.Component {
     render() {
         return (
             <div className="container">
-                <PageController attributes={this.state.attributes}
-                                onCreate={this.onCreate} />
+                <div className="row">
+                    <div className="float-xs-right">
+                        <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
+                    </div>
+                </div>
                 <EmployeeList page={this.state.page}
                               employees={this.state.employees}
                               links={this.state.links}

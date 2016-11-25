@@ -15,13 +15,13 @@ class SelectItemsPerPage extends React.Component {
     }
 
     render() {
-        return <div className="float-xs-right">
+        return (
             <select ref="pageSize" defaultValue={this.props.pageSize} onChange={this.handleInput} className="form-control">
                 <option value="2">2</option>
                 <option value="5">5</option>
                 <option value="7">7</option>
                 <option value="10">10</option>
             </select>
-        </div>
+        )
     }
 }
