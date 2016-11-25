@@ -52,10 +52,10 @@ class App extends React.Component {
             });
         }).then(employeeCollection => {
             this.page = employeeCollection.entity.page;
-            return employeeCollection.entity._embedded.employees.map(employee =>
+            return employeeCollection.entity._embedded.employees.map(employees =>
                 client({
                     method: 'GET',
-                    path: employee._links.self.href
+                    path: employees._links.self.href
                 })
             );
         }).then(employeePromises => {
@@ -82,36 +82,36 @@ class App extends React.Component {
         })
     }
 
-    onUpdate(employee, updatedEmployee) {
+    onUpdate(employees, updatedEmployee) {
         client({
             method: 'PUT',
-            path: employee.entity._links.self.href,
+            path: employees.entity._links.self.href,
             entity: updatedEmployee,
             headers: {
                 'Content-Type': 'application/json',
-                'If-Match': employee.headers.Etag
+                'If-Match': employees.headers.Etag
             }
         }).done(response => {
             /* Let the websocket handler update the state */
         }, response => {
             if (response.status.code === 403) {
                 alert('ACCESS DENIED: You are not authorized to update ' +
-                    employee.entity._links.self.href);
+                    employees.entity._links.self.href);
             }
             if (response.status.code === 412) {
-                alert('DENIED: Unable to update ' + employee.entity._links.self.href +
+                alert('DENIED: Unable to update ' + employees.entity._links.self.href +
                     '. Your copy is stale.');
             }
         });
     }
 
-    onDelete(employee) {
-        client({method: 'DELETE', path: employee.entity._links.self.href}
+    onDelete(employees) {
+        client({method: 'DELETE', path: employees.entity._links.self.href}
         ).done(response => {/* let the websocket handle updating the UI */},
             response => {
                 if (response.status.code === 403) {
                     alert('ACCESS DENIED: You are not authorized to delete ' +
-                        employee.entity._links.self.href);
+                        employees.entity._links.self.href);
                 }
             });
     }
@@ -124,10 +124,10 @@ class App extends React.Component {
             this.links = employeeCollection.entity._links;
             this.page = employeeCollection.entity.page;
 
-            return employeeCollection.entity._embedded.employees.map(employee =>
+            return employeeCollection.entity._embedded.employees.map(employees =>
                 client({
                     method: 'GET',
-                    path: employee._links.self.href
+                    path: employees._links.self.href
                 })
             );
         }).then(employeePromises => {
@@ -173,10 +173,10 @@ class App extends React.Component {
             this.links = employeeCollection.entity._links;
             this.page = employeeCollection.entity.page;
 
-            return employeeCollection.entity._embedded.employees.map(employee => {
+            return employeeCollection.entity._embedded.employees.map(employees => {
                 return client({
                     method: 'GET',
-                    path: employee._links.self.href
+                    path: employees._links.self.href
                 })
             });
         }).then(employeePromises => {
@@ -253,7 +253,7 @@ class CreateDialog extends React.Component {
                     <div>
                         <a href="#" title="Close" className="close">X</a>
 
-                        <h2>Create new employee</h2>
+                        <h2>Create new employees</h2>
 
                         <form>
                             {inputs}
@@ -279,29 +279,29 @@ class UpdateDialog extends React.Component {
         this.props.attributes.forEach(attribute => {
             updatedEmployee[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         });
-        this.props.onUpdate(this.props.employee, updatedEmployee);
+        this.props.onUpdate(this.props.employees, updatedEmployee);
         window.location = "#";
     }
 
     render() {
         var inputs = this.props.attributes.map(attribute =>
-            <p key={this.props.employee.entity[attribute]}>
+            <p key={this.props.employees.entity[attribute]}>
                 <input type="text" placeholder={attribute}
-                       defaultValue={this.props.employee.entity[attribute]}
+                       defaultValue={this.props.employees.entity[attribute]}
                        ref={attribute} className="field" />
             </p>
         );
 
-        var dialogId = "updateEmployee-" + this.props.employee.entity._links.self.href;
+        var dialogId = "updateEmployee-" + this.props.employees.entity._links.self.href;
 
         return (
-            <div key={this.props.employee.entity._links.self.href}>
+            <div key={this.props.employees.entity._links.self.href}>
                 <a href={"#" + dialogId}>Update</a>
                 <div id={dialogId} className="modalDialog">
                     <div>
                         <a href="#" title="Close" className="close">X</a>
 
-                        <h2>Update an employee</h2>
+                        <h2>Update an employees</h2>
 
                         <form>
                             {inputs}
@@ -345,9 +345,9 @@ class EmployeeList extends React.Component {
         var pageInfo = this.props.page.hasOwnProperty("number") ?
             <h3>Books - Page {this.props.page.number + 1} of {this.props.page.totalPages}</h3> : null;
 
-        var employees = this.props.employees.map(employee =>
-            <Employee key={employee.entity._links.self.href}
-                      employee={employee}
+        var employees = this.props.employees.map(employees =>
+            <Employee key={employees.entity._links.self.href}
+                      employees={employees}
                       attributes={this.props.attributes}
                       onUpdate={this.props.onUpdate}
                       onDelete={this.props.onDelete}/>
@@ -439,19 +439,17 @@ class Employee extends React.Component {
     }
 
     handleDelete() {
-        this.props.onDelete(this.props.employee);
+        this.props.onDelete(this.props.employees);
     }
 
     render() {
         return (
             <tr>
                 <td></td>
-                <td>{this.props.employee.entity.firstName}</td>
-                <td>{this.props.employee.entity.lastName}</td>
-                <td>{this.props.employee.entity.description}</td>
-                <td>{this.props.employee.entity.manager.name}</td>
+                <td>{this.props.employees.entity.firstName}</td>
+                <td>{this.props.employees.entity.lastName}</td>
                 <td>
-                    <UpdateDialog employee={this.props.employee}
+                    <UpdateDialog employees={this.props.employees}
                                   attributes={this.props.attributes}
                                   onUpdate={this.props.onUpdate}/>
                 </td>

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
@@ -19,12 +20,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * Equivalent for spring-web-config.xml
  *
  * @author emorenkov
  */
 @Configuration
 @EnableAsync
+@EnableMongoAuditing
 public class SpringWebConfig extends WebMvcConfigurerAdapter implements AsyncConfigurer {
     private static final Logger log = LogManager.getLogger(SpringWebConfig.class);
 

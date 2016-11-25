@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 /**
  * Created by emorenkov on 15.11.16.
  */
-@RepositoryRestResource(collectionResourceRel = "employee", path = "employees")
+@RepositoryRestResource(collectionResourceRel = "employees", path = "employees")
 public interface EmployeeRepository extends MongoRepository<Employee, String> {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -24,6 +24,5 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
     @Override
     void delete(@Param("employee") Employee employee);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    Employee findByFirstName(String firstName);
+    Employee findByFirstName(String firstNaame);
 }

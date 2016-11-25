@@ -3,11 +3,9 @@ package com.morenkov.preloader;
 import com.morenkov.entity.Employee;
 import com.morenkov.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,8 +13,8 @@ import java.util.Set;
 /**
  * @author emorenkov
  */
-@Component
-public class DatabaseLoader implements CommandLineRunner {
+//@Component
+public class DatabaseLoader /*implements CommandLineRunner*/ {
 
     private final EmployeeRepository employeeRepository;
 
@@ -25,7 +23,7 @@ public class DatabaseLoader implements CommandLineRunner {
         this.employeeRepository = employeeRepository;
     }
 
-    @Override
+//    @Override
     public void run(String... strings) throws Exception {
         Set<String> adminRoles = new HashSet<>();
         adminRoles.add("ROLE_USER");
@@ -43,8 +41,6 @@ public class DatabaseLoader implements CommandLineRunner {
         this.employeeRepository.save(new Employee("Jaene", "Proudmoure", userRoles, greg.getId(), "12"));
         this.employeeRepository.save(new Employee("Kell", "Talas", userRoles, greg.getId(), "12"));
 
-        this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
-        this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
         this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
 
         SecurityContextHolder.clearContext();
