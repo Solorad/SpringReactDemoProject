@@ -1,3 +1,6 @@
+const React = require('react');
+const ReactDOM = require('react-dom');
+
 class CreateDialog extends React.Component {
 
     constructor(props) {

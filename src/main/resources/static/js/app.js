@@ -7,8 +7,10 @@ const client = require('./common/client');
 var stompClient = require('./common/websocket-listener');
 const follow = require('./common/follow'); // function to hop multiple links by "rel"
 
-const employeeList = require('./books/EmployeeList');
-const pageController = require('./books/PageController');
+const EmployeeList = require('./books/EmployeeList');
+const NavLinks = require('./books/NavLinks');
+const CreateDialog = require('./books/CreateDialog');
+const SelectItemsPerPage = require('./books/SelectItems');
 
 const root = '/api';
 
@@ -205,22 +207,26 @@ class App extends React.Component {
     }
 
     render() {
+        var pageInfo = this.state.page.hasOwnProperty("number") ?
+            <h3>Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
         return (
             <div className="container">
                 <div className="row">
+                    <div>{pageInfo}</div>
                     <div className="float-xs-right">
                         <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
+                        <SelectItemsPerPage pageSize={this.props.pageSize}
+                                            updatePageSize={this.props.updatePageSize}/>
                     </div>
                 </div>
-                <EmployeeList page={this.state.page}
-                              employees={this.state.employees}
-                              links={this.state.links}
+                <EmployeeList employees={this.state.employees}
                               pageSize={this.state.pageSize}
                               attributes={this.state.attributes}
-                              onNavigate={this.onNavigate}
                               onUpdate={this.onUpdate}
                               onDelete={this.onDelete}
                               updatePageSize={this.updatePageSize}/>
+                <NavLinks links={this.state.links}
+                          onNavigate={this.onNavigate}/>
             </div>
         )
     }
