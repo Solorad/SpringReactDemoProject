@@ -7,10 +7,10 @@ const client = require('./common/client');
 var stompClient = require('./common/websocket-listener');
 const follow = require('./common/follow'); // function to hop multiple links by "rel"
 
-const EmployeeList = require('./books/EmployeeList');
-const NavLinks = require('./books/NavLinks');
-const CreateDialog = require('./books/CreateDialog');
-const SelectItemsPerPage = require('./books/SelectItems');
+const BookList = require('./books/BookList.js');
+const NavLinks = require('./books/NavLinks.js');
+const CreateDialog = require('./books/CreateDialog.js');
+const SelectItemsPerPage = require('./books/SelectItems.js');
 
 const root = '/api';
 
@@ -211,22 +211,18 @@ class App extends React.Component {
             <h3>Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
         return (
             <div className="container">
-                <div className="row">
-                    <div>{pageInfo}</div>
-                    <div className="float-xs-right">
-                        <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-                        <SelectItemsPerPage pageSize={this.props.pageSize}
-                                            updatePageSize={this.props.updatePageSize}/>
-                    </div>
-                </div>
-                <EmployeeList employees={this.state.employees}
-                              pageSize={this.state.pageSize}
-                              attributes={this.state.attributes}
-                              onUpdate={this.onUpdate}
-                              onDelete={this.onDelete}
-                              updatePageSize={this.updatePageSize}/>
-                <NavLinks links={this.state.links}
-                          onNavigate={this.onNavigate}/>
+                {/*<div className="row">*/}
+                    {/*<div>{pageInfo}</div>*/}
+                    {/*<div className="float-xs-right">*/}
+                        {/*<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>*/}
+                        {/*<SelectItemsPerPage pageSize={this.props.pageSize}*/}
+                                            {/*updatePageSize={this.props.updatePageSize}/>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
+                AAA
+                <BookList/>
+                {/*<NavLinks links={this.state.links}*/}
+                          {/*onNavigate={this.onNavigate}/>*/}
             </div>
         )
     }

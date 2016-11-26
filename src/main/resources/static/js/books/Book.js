@@ -1,7 +1,7 @@
 const React = require('react');
-const UpdateDialog = require('./UpdateDialog');
+const UpdateDialog = require('./UpdateDialog.js');
 
-class Employee extends React.Component {
+class Book extends React.Component {
     constructor(props) {
         super(props);
         this.handleDelete = this.handleDelete.bind(this);
