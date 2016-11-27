@@ -1,7 +1,7 @@
 'use strict';
 
-const React = require('react');
 import 'babel-polyfill';
+import React from 'react';
 const ReactDOM = require('react-dom');
 const when = require('when');
 const client = require('./common/client');
@@ -11,7 +11,7 @@ const follow = require('./common/follow'); // function to hop multiple links by 
 import BookList  from './books/BookList.js';
 import NavLinks from './books/NavLinks.js';
 import CreateDialog from './books/CreateDialog.js';
-import SelectItemsPerPage from './books/SelectItems.js';
+import SelectItems from './books/SelectItems.js';
 
 const root = '/api';
 
@@ -216,18 +216,11 @@ class App extends React.Component {
                     <div>{pageInfo}</div>
                     <div className="float-xs-right">
                         <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-                        <SelectItemsPerPage pageSize={this.props.pageSize}
+                        <SelectItems pageSize={this.props.pageSize}
                                             updatePageSize={this.props.updatePageSize}/>
                     </div>
                 </div>
-                <BookList employees={this.state.employees}
-                              pageSize={this.state.pageSize}
-                              attributes={this.state.attributes}
-                              onUpdate={this.onUpdate}
-                              onDelete={this.onDelete}
-                              updatePageSize={this.updatePageSize}/>
-                <NavLinks links={this.state.links}
-                          onNavigate={this.onNavigate}/>
+
             </div>
         )
     }

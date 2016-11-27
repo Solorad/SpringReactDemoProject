@@ -1,19 +1,19 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-class SelectItemsPerPage extends React.Component {
+class SelectItems extends React.Component {
     constructor(props) {
         super(props);
         this.handleInput = this.handleInput.bind(this);
     }
 
     handleInput(e) {
-        e.preventDefault();
-        var pageSize = ReactDOM.findDOMNode(this.refs.pageSize).value;
+        e.preventDefault();s
+        var pageSize = ReactDOM.findDOMNode(this.props.pageSize).value;
         if (/^[0-9]+$/.test(pageSize)) {
             this.props.updatePageSize(pageSize);
         } else {
-            ReactDOM.findDOMNode(this.refs.pageSize).value = pageSize.substring(0, pageSize.length - 1);
+            ReactDOM.findDOMNode(this.props.pageSize).value = pageSize.substring(0, pageSize.length - 1);
         }
     }
 
