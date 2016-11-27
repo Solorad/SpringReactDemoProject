@@ -47,3 +47,5 @@ class CreateDialog extends React.Component {
         )
     }
 }
+
+export default CreateDialog;

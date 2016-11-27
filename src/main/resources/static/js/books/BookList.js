@@ -41,3 +41,5 @@ class BookList extends React.Component {
         )
     }
 }
+
+export default BookList;
