@@ -1,11 +1,7 @@
 import React from 'react';
 import Book from './Book';
 
-class BookList extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
+var BookList = React.createClass({
 
     render() {
         // var employees = this.props.employees.map(employees =>
@@ -40,6 +36,6 @@ class BookList extends React.Component {
             // </div>
         )
     }
-}
+});
 
 export default BookList;
