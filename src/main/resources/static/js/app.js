@@ -211,18 +211,22 @@ class App extends React.Component {
             <h3>Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
         return (
             <div className="container">
-                {/*<div className="row">*/}
-                    {/*<div>{pageInfo}</div>*/}
-                    {/*<div className="float-xs-right">*/}
-                        {/*<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>*/}
-                        {/*<SelectItemsPerPage pageSize={this.props.pageSize}*/}
-                                            {/*updatePageSize={this.props.updatePageSize}/>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
-                AAA
-                <BookList/>
-                {/*<NavLinks links={this.state.links}*/}
-                          {/*onNavigate={this.onNavigate}/>*/}
+                <div className="row">
+                    <div>{pageInfo}</div>
+                    <div className="float-xs-right">
+                        <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
+                        <SelectItemsPerPage pageSize={this.props.pageSize}
+                                            updatePageSize={this.props.updatePageSize}/>
+                    </div>
+                </div>
+                <BookList employees={this.state.employees}
+                              pageSize={this.state.pageSize}
+                              attributes={this.state.attributes}
+                              onUpdate={this.onUpdate}
+                              onDelete={this.onDelete}
+                              updatePageSize={this.updatePageSize}/>
+                <NavLinks links={this.state.links}
+                          onNavigate={this.onNavigate}/>
             </div>
         )
     }
