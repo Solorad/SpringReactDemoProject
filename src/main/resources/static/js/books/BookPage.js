@@ -4,18 +4,18 @@ import 'babel-polyfill';
 import React from 'react';
 const ReactDOM = require('react-dom');
 const when = require('when');
-const client = require('./common/client');
-var stompClient = require('./common/websocket-listener');
-const follow = require('./common/follow'); // function to hop multiple links by "rel"
+const client = require('../common/client');
+var stompClient = require('../common/websocket-listener');
+const follow = require('../common/follow'); // function to hop multiple links by "rel"
 
-import BookList  from './books/BookList';
-import NavLinks from './books/NavLinks';
-import CreateDialog from './books/CreateDialog';
-import SelectItems from './books/SelectItems';
+import BookList  from './BookList';
+import NavLinks from './NavLinks';
+import CreateDialog from './CreateDialog';
+import SelectItems from './SelectItems';
 
 const root = '/api';
 
-class App extends React.Component {
+class BookPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -226,7 +226,4 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('react')
-);
+export default BookPage;

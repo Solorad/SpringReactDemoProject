@@ -3,7 +3,7 @@ var path = require('path');
 var node_dir = __dirname + '/node_modules';
 
 module.exports = {
-    entry: './src/main/resources/static/js/app.js',
+    entry: './src/main/resources/static/js/index.js',
     devtool: 'sourcemaps',
     cache: true,
     debug: true,

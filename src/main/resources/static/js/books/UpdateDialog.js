@@ -48,3 +48,5 @@ class UpdateDialog extends React.Component {
         )
     }
 }
+
+export default UpdateDialog;

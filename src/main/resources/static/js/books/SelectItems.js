@@ -28,3 +28,4 @@ class SelectItems extends React.Component {
         )
     }
 }
+export default SelectItems;

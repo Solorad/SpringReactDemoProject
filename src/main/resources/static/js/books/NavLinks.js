@@ -48,3 +48,5 @@ class NavLinks extends React.Component {
         )
     }
 }
+
+export default NavLinks;
