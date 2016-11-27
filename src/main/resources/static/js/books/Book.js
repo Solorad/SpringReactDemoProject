@@ -1,5 +1,5 @@
 import React from 'react';
-const UpdateDialog = require('./UpdateDialog.js');
+import UpdateDialog from './UpdateDialog.js';
 
 class Book extends React.Component {
     constructor(props) {
