@@ -8,7 +8,7 @@ class SelectItems extends React.Component {
     }
 
     handleInput(e) {
-        e.preventDefault();s
+        e.preventDefault();
         var pageSize = ReactDOM.findDOMNode(this.props.pageSize).value;
         if (/^[0-9]+$/.test(pageSize)) {
             this.props.updatePageSize(pageSize);

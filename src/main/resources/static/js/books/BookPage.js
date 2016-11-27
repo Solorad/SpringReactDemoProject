@@ -220,7 +220,14 @@ class BookPage extends React.Component {
                                             updatePageSize={this.props.updatePageSize}/>
                     </div>
                 </div>
-
+                <BookList employees={this.state.employees}
+                          pageSize={this.state.pageSize}
+                          attributes={this.state.attributes}
+                          onUpdate={this.onUpdate}
+                          onDelete={this.onDelete}
+                          updatePageSize={this.updatePageSize}/>
+                <NavLinks links={this.state.links}
+                          onNavigate={this.onNavigate}/>
             </div>
         )
     }
