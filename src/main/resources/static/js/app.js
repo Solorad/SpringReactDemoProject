@@ -1,16 +1,17 @@
 'use strict';
 
 const React = require('react');
+import 'babel-polyfill';
 const ReactDOM = require('react-dom');
 const when = require('when');
 const client = require('./common/client');
 var stompClient = require('./common/websocket-listener');
 const follow = require('./common/follow'); // function to hop multiple links by "rel"
 
-const BookList = require('./books/BookList.js');
-const NavLinks = require('./books/NavLinks.js');
-const CreateDialog = require('./books/CreateDialog.js');
-const SelectItemsPerPage = require('./books/SelectItems.js');
+import BookList  from './books/BookList.js';
+import NavLinks from './books/NavLinks.js';
+import CreateDialog from './books/CreateDialog.js';
+import SelectItemsPerPage from './books/SelectItems.js';
 
 const root = '/api';
 
