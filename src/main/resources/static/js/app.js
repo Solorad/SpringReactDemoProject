@@ -8,10 +8,10 @@ const client = require('./common/client');
 var stompClient = require('./common/websocket-listener');
 const follow = require('./common/follow'); // function to hop multiple links by "rel"
 
-import BookList  from './books/BookList.js';
-import NavLinks from './books/NavLinks.js';
-import CreateDialog from './books/CreateDialog.js';
-import SelectItems from './books/SelectItems.js';
+import BookList  from './books/BookList';
+import NavLinks from './books/NavLinks';
+import CreateDialog from './books/CreateDialog';
+import SelectItems from './books/SelectItems';
 
 const root = '/api';
 

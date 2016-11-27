@@ -1,5 +1,5 @@
-const Book = require('./Book.js');
-const React = require('react');
+import React from 'react';
+import Book from './Book';
 
 class BookList extends React.Component {
 
