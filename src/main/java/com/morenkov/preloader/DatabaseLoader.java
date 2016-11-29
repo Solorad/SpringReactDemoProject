@@ -15,8 +15,8 @@ import java.util.Set;
 /**
  * @author emorenkov
  */
-@Component
-public class DatabaseLoader implements CommandLineRunner {
+//@Component
+public class DatabaseLoader /*implements CommandLineRunner*/ {
 
     private final EmployeeRepository employeeRepository;
 
