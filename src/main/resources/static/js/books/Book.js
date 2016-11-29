@@ -17,8 +17,8 @@ class Book extends React.Component {
                 <td></td>
                 <td>{this.props.employees.entity.firstName}</td>
                 <td>{this.props.employees.entity.lastName}</td>
-                <td>%nbsp;</td>
-                <td>%nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
                 <td>
                     <UpdateDialog employees={this.props.employees}
                                   attributes={this.props.attributes}
