@@ -17,13 +17,15 @@ class Book extends React.Component {
                 <td></td>
                 <td>{this.props.employees.entity.firstName}</td>
                 <td>{this.props.employees.entity.lastName}</td>
+                <td>%nbsp;</td>
+                <td>%nbsp;</td>
                 <td>
                     <UpdateDialog employees={this.props.employees}
                                   attributes={this.props.attributes}
                                   onUpdate={this.props.onUpdate}/>
                 </td>
                 <td>
-                    <button onClick={this.handleDelete}>Delete</button>
+                    <button onClick={this.handleDelete} className="btn btn-warning">Delete</button>
                 </td>
             </tr>
         )

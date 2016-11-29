@@ -15,14 +15,7 @@
 
 <div th:replace="fragments/header :: header"></div>
 
-<div>
-    Hello, <span th:text="${#authentication.name}">user</span>.
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Log Out"/>
-    </form>
-</div>
-
-<div id="react"></div>
+<div id="react" class="container"></div>
 
 <script src="built/bundle.js"></script>
 

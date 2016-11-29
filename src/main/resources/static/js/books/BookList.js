@@ -14,24 +14,22 @@ var BookList = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-md-8">
-                    <table className="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Description</th>
-                            <th>Year</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {employees}
-                        </tbody>
-                    </table>
-                </div>
+                <table className="table table-striped book-table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Description</th>
+                        <th>Year</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {employees}
+                    </tbody>
+                </table>
             </div>
         )
     }

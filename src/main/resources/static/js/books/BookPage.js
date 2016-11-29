@@ -209,11 +209,11 @@ class BookPage extends React.Component {
 
     render() {
         var pageInfo = this.state.page.hasOwnProperty("number") ?
-            <h3>Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
+            <h3 className="col-xs-4">Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
         return (
-            <div className="container">
+            <div>
                 <div className="row">
-                    <div>{pageInfo}</div>
+                    {pageInfo}
                     <div className="float-xs-right">
                         <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
                         <SelectItems pageSize={this.props.pageSize}

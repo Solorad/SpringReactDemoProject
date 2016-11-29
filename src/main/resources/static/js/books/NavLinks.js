@@ -27,23 +27,12 @@ class NavLinks extends React.Component {
     }
 
     render() {
-        var navLinks = [];
-        if ("first" in this.props.links) {
-            navLinks.push(<button key="first" onClick={this.handleNavFirst}>&lt;&lt;</button>);
-        }
-        if ("prev" in this.props.links) {
-            navLinks.push(<button key="prev" onClick={this.handleNavPrev}>&lt;</button>);
-        }
-        if ("next" in this.props.links) {
-            navLinks.push(<button key="next" onClick={this.handleNavNext}>&gt;</button>);
-        }
-        if ("last" in this.props.links) {
-            navLinks.push(<button key="last" onClick={this.handleNavLast}>&gt;&gt;</button>);
-        }
-
         return (
-            <div className="row">
-                {navLinks}
+            <div className="row float-xs-right btn-group">
+                <button key="first" className="btn btn-default" onClick={this.handleNavFirst} disabled={!("first" in this.props.links)}>&lt;&lt;</button>
+                <button key="prev" className="btn btn-default" onClick={this.handleNavPrev} disabled={!("prev" in this.props.links)}>&lt;</button>
+                <button key="next" className="btn btn-default" onClick={this.handleNavNext} disabled={!("next" in this.props.links)}>&gt;</button>
+                <button key="last" className="btn btn-default" onClick={this.handleNavLast} disabled={!("last" in this.props.links)}>&gt;&gt;</button>
             </div>
         )
     }

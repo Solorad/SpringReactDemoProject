@@ -1,3 +1,11 @@
+body {
+    padding-top: 5rem;
+}
+
+.book-table td {
+    padding: 0;
+}
+
 input.field {
     width: 90%;
 }
