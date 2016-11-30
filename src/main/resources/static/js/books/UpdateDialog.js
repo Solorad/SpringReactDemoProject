@@ -2,51 +2,52 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 
 class UpdateDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-    constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+  handleSubmit(e) {
+    e.preventDefault();
+    const { props, refs } = this;
+    const updatedEmployee = {};
 
-    handleSubmit(e) {
-        e.preventDefault();
-        var updatedEmployee = {};
-        this.props.attributes.forEach(attribute => {
-            updatedEmployee[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-        });
-        this.props.onUpdate(this.props.employees, updatedEmployee);
-        window.location = "#";
-    }
+    props.attributes.forEach(a => updatedEmployee[a] = refs[a].value.trim());
+    props.onUpdate(props.employees, updatedEmployee);
 
-    render() {
-        var inputs = this.props.attributes.map(attribute =>
-            <p key={this.props.employees.entity[attribute]}>
-                <input type="text" placeholder={attribute}
-                       defaultValue={this.props.employees.entity[attribute]}
-                       ref={attribute} className="field" />
-            </p>
-        );
+    window.location = "#";
+  }
 
-        var dialogId = "updateEmployee-" + this.props.employees.entity._links.self.href;
+  render() {
+    const { attributes, employees } = this.props;
+    const { entity } = employees;
+    const { href } = entity._links.self;
+    const dialogId = `updateEmployee-${href}`;
 
-        return (
-            <div key={this.props.employees.entity._links.self.href}>
-                <a href={"#" + dialogId}>Update</a>
-                <div id={dialogId} className="modalDialog">
-                    <div>
-                        <a href="#" title="Close" className="close">X</a>
-
-                        <h2>Update an employees</h2>
-
-                        <form>
-                            {inputs}
-                            <button onClick={this.handleSubmit}>Update</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+    return (
+      <div key={href}>
+         <a href={`#${dialogId}`}>Update</a>
+         <div className="modalDialog" id={dialogId}>
+            <a className="close" href="#" title="Close">X</a>
+            <h2>Update an employees</h2>
+            <form>
+              {attributes.map(attribute => (
+                <p key={entity[attribute]}>
+                  <input
+                    className="field"
+                    type="text"
+                    placeholder={attribute}
+                    defaultValue={entity[attribute]}
+                    ref={attribute}
+                  />
+                </p>
+              ))}
+              <button onClick={this.handleSubmit}>Update</button>
+            </form>
+         </div>
+      </div>
+    );
+  }
 }
 
 export default UpdateDialog;
