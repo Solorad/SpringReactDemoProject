@@ -217,7 +217,7 @@ class BookPage extends React.Component {
                     <div className="float-xs-right">
                         <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
                         <SelectItems pageSize={this.props.pageSize}
-                                            updatePageSize={this.props.updatePageSize}/>
+                                     updatePageSize={this.updatePageSize}/>
                     </div>
                 </div>
                 <BookList employees={this.state.employees}
