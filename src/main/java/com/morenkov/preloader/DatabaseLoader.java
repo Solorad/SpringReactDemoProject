@@ -15,8 +15,8 @@ import java.util.Set;
 /**
  * @author emorenkov
  */
-//@Component
-public class DatabaseLoader /*implements CommandLineRunner*/ {
+@Component
+public class DatabaseLoader implements CommandLineRunner {
 
     private final EmployeeRepository employeeRepository;
 
@@ -25,7 +25,7 @@ public class DatabaseLoader /*implements CommandLineRunner*/ {
         this.employeeRepository = employeeRepository;
     }
 
-//    @Override
+    @Override
     public void run(String... strings) throws Exception {
         Set<String> adminRoles = new HashSet<>();
         adminRoles.add("ROLE_USER");

@@ -33,7 +33,7 @@ public class EventHandler {
     @HandleAfterCreate
     public void newEmployee(Employee employee) {
         this.websocket.convertAndSend(
-                MESSAGE_PREFIX + "/newEmployee", getPath(employee));
+                MESSAGE_PREFIX + "/newBook", getPath(employee));
     }
 
     @HandleAfterDelete
