@@ -10,11 +10,11 @@ class CreateDialog extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        var newEmployee = {};
+        var newBook = {};
         this.props.attributes.forEach(attribute => {
-            newEmployee[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+            newBook[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         });
-        this.props.onCreate(newEmployee);
+        this.props.onCreate(newBook);
         this.props.attributes.forEach(attribute => {
             ReactDOM.findDOMNode(this.refs[attribute]).value = ''; // clear out the dialog's inputs
         });
@@ -29,13 +29,13 @@ class CreateDialog extends React.Component {
         );
         return (
             <div>
-                <a href="#createEmployee">Create</a>
+                <a href="#createBook">Create</a>
 
-                <div id="createEmployee" className="modalDialog">
+                <div id="createBook" className="modalDialog">
                     <div>
                         <a href="#" title="Close" className="close">X</a>
 
-                        <h2>Create new employees</h2>
+                        <h2>Create new ищщл</h2>
 
                         <form>
                             {inputs}

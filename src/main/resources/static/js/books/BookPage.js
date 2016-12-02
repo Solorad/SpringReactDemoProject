@@ -15,11 +15,14 @@ import SelectItems from './SelectItems';
 
 const root = '/api';
 
+const csrfTokenHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+
 class BookPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {employees: [], attributes: [], page: 1, pageSize: 2, links: {}};
+        this.state = {books: [], attributes: [], page: 1, pageSize: 2, links: {}};
         this.updatePageSize = this.updatePageSize.bind(this);
         this.onCreate = this.onCreate.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
@@ -31,11 +34,11 @@ class BookPage extends React.Component {
 
     loadFromServer(pageSize) {
         follow(client, root, [
-            {rel: 'employees', params: {size: pageSize}}]
-        ).then(employeeCollection => {
+            {rel: 'books', params: {size: pageSize}}]
+        ).then(bookCollection => {
             return client({
                 method: 'GET',
-                path: employeeCollection.entity._links.profile.href,
+                path: bookCollection.entity._links.profile.href,
                 headers: {'Accept': 'application/schema+json'}
             }).then(schema => {
                 /**
@@ -53,23 +56,23 @@ class BookPage extends React.Component {
                 });
 
                 this.schema = schema.entity;
-                this.links = employeeCollection.entity._links;
-                return employeeCollection;
+                this.links = bookCollection.entity._links;
+                return bookCollection;
             });
-        }).then(employeeCollection => {
-            this.page = employeeCollection.entity.page;
-            return employeeCollection.entity._embedded.employees.map(employees =>
+        }).then(bookCollection => {
+            this.page = bookCollection.entity.page;
+            return bookCollection.entity._embedded.books.map(books =>
                 client({
                     method: 'GET',
-                    path: employees._links.self.href
+                    path: books._links.self.href
                 })
             );
-        }).then(employeePromises => {
-            return when.all(employeePromises);
-        }).done(employees => {
+        }).then(bookPromises => {
+            return when.all(bookPromises);
+        }).done(books => {
             this.setState({
                 page: this.page,
-                employees: employees,
+                books: books,
                 attributes: Object.keys(this.schema.properties),
                 pageSize: pageSize,
                 links: this.links
@@ -77,47 +80,56 @@ class BookPage extends React.Component {
         });
     }
 
-    onCreate(newEmployee) {
-        follow(client, root, ['employees']).done(response => {
+    onCreate(newBook) {
+        follow(client, root, ['books']).done(response => {
             client({
                 method: 'POST',
                 path: response.entity._links.self.href,
-                entity: newEmployee,
-                headers: {'Content-Type': 'application/json'}
+                entity: newBook,
+                headers: {
+                    'Content-Type': 'application/json',
+                    csrfTokenHeader : csrfToken
+                }
             })
         })
     }
 
-    onUpdate(employees, updatedEmployee) {
+    onUpdate(book, updatedBook) {
         client({
             method: 'PUT',
-            path: employees.entity._links.self.href,
-            entity: updatedEmployee,
+            path: book.entity._links.self.href,
+            entity: updatedBook,
             headers: {
                 'Content-Type': 'application/json',
-                'If-Match': employees.headers.Etag
+                'If-Match': book.headers.Etag,
+                csrfTokenHeader : csrfToken
             }
         }).done(response => {
             /* Let the websocket handler update the state */
         }, response => {
             if (response.status.code === 403) {
                 alert('ACCESS DENIED: You are not authorized to update ' +
-                    employees.entity._links.self.href);
+                    book.entity._links.self.href);
             }
             if (response.status.code === 412) {
-                alert('DENIED: Unable to update ' + employees.entity._links.self.href +
+                alert('DENIED: Unable to update ' + book.entity._links.self.href +
                     '. Your copy is stale.');
             }
         });
     }
 
-    onDelete(employees) {
-        client({method: 'DELETE', path: employees.entity._links.self.href}
+    onDelete(book) {
+        client({
+            method: 'DELETE',
+            path: book.entity._links.self.href,
+            headers: {
+                csrfTokenHeader : csrfToken
+            }}
         ).done(response => {/* let the websocket handle updating the UI */},
             response => {
                 if (response.status.code === 403) {
                     alert('ACCESS DENIED: You are not authorized to delete ' +
-                        employees.entity._links.self.href);
+                        book.entity._links.self.href);
                 }
             });
     }
@@ -126,22 +138,22 @@ class BookPage extends React.Component {
         client({
             method: 'GET',
             path: navUri
-        }).then(employeeCollection => {
-            this.links = employeeCollection.entity._links;
-            this.page = employeeCollection.entity.page;
+        }).then(bookCollection => {
+            this.links = bookCollection.entity._links;
+            this.page = bookCollection.entity.page;
 
-            return employeeCollection.entity._embedded.employees.map(employees =>
+            return bookCollection.entity._embedded.books.map(books =>
                 client({
                     method: 'GET',
-                    path: employees._links.self.href
+                    path: books._links.self.href
                 })
             );
-        }).then(employeePromises => {
-            return when.all(employeePromises);
-        }).done(employees => {
+        }).then(bookPromises => {
+            return when.all(bookPromises);
+        }).done(books => {
             this.setState({
                 page: this.page,
-                employees: employees,
+                books: books,
                 attributes: Object.keys(this.schema.properties),
                 pageSize: this.state.pageSize,
                 links: this.links
@@ -155,9 +167,9 @@ class BookPage extends React.Component {
         }
     }
 
-    refreshAndGoToLastPage(message) {
+    refreshAndGoToLastPage() {
         follow(client, root, [{
-            rel: 'employees',
+            rel: 'books',
             params: {size: this.state.pageSize}
         }]).done(response => {
             if (response.entity._links.last !== undefined) {
@@ -168,29 +180,29 @@ class BookPage extends React.Component {
         })
     }
 
-    refreshCurrentPage(message) {
+    refreshCurrentPage() {
         follow(client, root, [{
-            rel: 'employees',
+            rel: 'books',
             params: {
                 size: this.state.pageSize,
                 page: this.state.page.number
             }
-        }]).then(employeeCollection => {
-            this.links = employeeCollection.entity._links;
-            this.page = employeeCollection.entity.page;
+        }]).then(bookCollection => {
+            this.links = bookCollection.entity._links;
+            this.page = bookCollection.entity.page;
 
-            return employeeCollection.entity._embedded.employees.map(employees => {
+            return bookCollection.entity._embedded.books.map(books => {
                 return client({
                     method: 'GET',
-                    path: employees._links.self.href
+                    path: books._links.self.href
                 })
             });
-        }).then(employeePromises => {
-            return when.all(employeePromises);
-        }).then(employees => {
+        }).then(bookPromises => {
+            return when.all(bookPromises);
+        }).then(books => {
             this.setState({
                 page: this.page,
-                employees: employees,
+                books: books,
                 attributes: Object.keys(this.schema.properties),
                 pageSize: this.state.pageSize,
                 links: this.links
@@ -201,9 +213,9 @@ class BookPage extends React.Component {
     componentDidMount() {
         this.loadFromServer(this.state.pageSize);
         stompClient.register([
-            {route: '/topic/newEmployee', callback: this.refreshAndGoToLastPage},
-            {route: '/topic/updateEmployee', callback: this.refreshCurrentPage},
-            {route: '/topic/deleteEmployee', callback: this.refreshCurrentPage}
+            {route: '/topic/newBook', callback: this.refreshAndGoToLastPage},
+            {route: '/topic/updateBook', callback: this.refreshCurrentPage},
+            {route: '/topic/deleteBook', callback: this.refreshCurrentPage}
         ]);
     }
 
@@ -220,7 +232,7 @@ class BookPage extends React.Component {
                                      updatePageSize={this.updatePageSize}/>
                     </div>
                 </div>
-                <BookList employees={this.state.employees}
+                <BookList books={this.state.books}
                           pageSize={this.state.pageSize}
                           attributes={this.state.attributes}
                           onUpdate={this.onUpdate}

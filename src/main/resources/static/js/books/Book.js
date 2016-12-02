@@ -8,19 +8,21 @@ class Book extends React.Component {
     }
 
     handleDelete() {
-        this.props.onDelete(this.props.employees);
+        this.props.onDelete(this.props.book);
     }
 
     render() {
         return (
             <tr>
                 <td></td>
-                <td>{this.props.employees.entity.firstName}</td>
-                <td>{this.props.employees.entity.lastName}</td>
+                <td>{this.props.book.entity.title}</td>
+                <td>{this.props.book.entity.authors}</td>
+                <td>{this.props.book.entity.description}</td>
+                <td>{this.props.book.entity.publishDate}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>
-                    <UpdateDialog employees={this.props.employees}
+                    <UpdateDialog book={this.props.book}
                                   attributes={this.props.attributes}
                                   onUpdate={this.props.onUpdate}/>
                 </td>

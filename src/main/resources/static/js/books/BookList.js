@@ -4,9 +4,9 @@ import Book from './Book';
 var BookList = React.createClass({
 
     render() {
-        var employees = this.props.employees.map(employees =>
-            <Book key={employees.entity._links.self.href}
-                      employees={employees}
+        var books = this.props.books.map(book =>
+            <Book key={book.entity._links.self.href}
+                  book={book}
                       attributes={this.props.attributes}
                       onUpdate={this.props.onUpdate}
                       onDelete={this.props.onDelete}/>
@@ -19,15 +19,15 @@ var BookList = React.createClass({
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>Author</th>
+                        <th>Authors</th>
                         <th>Description</th>
-                        <th>Year</th>
+                        <th>Published</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {employees}
+                    {books}
                     </tbody>
                 </table>
             </div>

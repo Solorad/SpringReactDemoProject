@@ -1,5 +1,4 @@
 const React = require('react');
-const ReactDOM = require('react-dom');
 
 class UpdateDialog extends React.Component {
   constructor(props) {
@@ -10,38 +9,30 @@ class UpdateDialog extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const { props, refs } = this;
-    const updatedEmployee = {};
+    const updatedBook = {};
 
-    props.attributes.forEach(a => updatedEmployee[a] = refs[a].value.trim());
-    props.onUpdate(props.employees, updatedEmployee);
+    props.attributes.forEach(a => updatedBook[a] = refs[a].value.trim());
+    props.onUpdate(props.book, updatedBook);
 
     window.location = "#";
   }
 
   render() {
-    const { attributes, employees } = this.props;
-    const { entity } = employees;
+    const { attributes, book } = this.props;
+    const { entity } = book;
     const { href } = entity._links.self;
-    const dialogId = `updateEmployee-${href}`;
+    const dialogId = `updateBook-${href}`;
+
 
     return (
       <div key={href}>
          <a href={`#${dialogId}`}>Update</a>
          <div className="modalDialog" id={dialogId}>
             <a className="close" href="#" title="Close">X</a>
-            <h2>Update an employees</h2>
+            <h2>Update book</h2>
             <form>
-              {attributes.map(attribute => (
-                <p key={entity[attribute]}>
-                  <input
-                    className="field"
-                    type="text"
-                    placeholder={attribute}
-                    defaultValue={entity[attribute]}
-                    ref={attribute}
-                  />
-                </p>
-              ))}
+              <label for="">Title</label>
+              <input id="title"></input>
               <button onClick={this.handleSubmit}>Update</button>
             </form>
          </div>
