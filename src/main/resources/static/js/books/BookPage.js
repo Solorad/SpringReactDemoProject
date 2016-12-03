@@ -21,7 +21,10 @@ class BookPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {books: [], attributes: [], page: 1, pageSize: 2, links: {}};
+        this.state = {books: [], attributes: [],
+          page: 1, pageSize: 2, links: {},
+          csrfTokenHeader, csrfToken
+        };
         this.updatePageSize = this.updatePageSize.bind(this);
         this.onCreate = this.onCreate.bind(this);
         this.onUpdate = this.onUpdate.bind(this);

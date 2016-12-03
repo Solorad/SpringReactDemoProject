@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import client from '../common/client';
 
 class BookModalDialog extends React.Component {
 

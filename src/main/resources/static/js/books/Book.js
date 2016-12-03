@@ -3,7 +3,7 @@ import React from "react";
 class Book extends React.Component {
   constructor(props) {
     super(props);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.deleteBook = this.deleteBook.bind(this);
     this.showUpdateWindow = this.showUpdateWindow.bind(this);
   }
 
@@ -45,7 +45,7 @@ class Book extends React.Component {
           <button onClick={this.showUpdateWindow} className="btn btn-link">Update</button>
         </td>
         <td>
-          <button onClick={this.handleDelete} className="btn btn-warning">Delete</button>
+          <button onClick={this.deleteBook} className="btn btn-warning">Delete</button>
         </td>
       </tr>
     )
