@@ -1,16 +1,15 @@
 'use strict';
 
-import 'babel-polyfill';
 import React from 'react';
-const ReactDOM = require('react-dom');
-const when = require('when');
-const client = require('../common/client');
-var stompClient = require('../common/websocket-listener');
-const follow = require('../common/follow'); // function to hop multiple links by "rel"
+import 'babel-polyfill';
+import when from 'when';
+import client from '../common/client';
+import stompClient from '../common/websocket-listener';
+import follow from '../common/follow'; // function to hop multiple links by "rel"
 
 import BookList  from './BookList';
 import NavLinks from './NavLinks';
-import CreateDialog from './CreateDialog';
+import BookModalDialog from './BookModalDialog';
 import SelectItems from './SelectItems';
 
 const root = '/api';
@@ -80,58 +79,8 @@ class BookPage extends React.Component {
         });
     }
 
-    onCreate(newBook) {
-        follow(client, root, ['books']).done(response => {
-            client({
-                method: 'POST',
-                path: response.entity._links.self.href,
-                entity: newBook,
-                headers: {
-                    'Content-Type': 'application/json',
-                    csrfTokenHeader : csrfToken
-                }
-            })
-        })
-    }
+    showUpdateWindow(book) {
 
-    onUpdate(book, updatedBook) {
-        client({
-            method: 'PUT',
-            path: book.entity._links.self.href,
-            entity: updatedBook,
-            headers: {
-                'Content-Type': 'application/json',
-                'If-Match': book.headers.Etag,
-                csrfTokenHeader : csrfToken
-            }
-        }).done(response => {
-            /* Let the websocket handler update the state */
-        }, response => {
-            if (response.status.code === 403) {
-                alert('ACCESS DENIED: You are not authorized to update ' +
-                    book.entity._links.self.href);
-            }
-            if (response.status.code === 412) {
-                alert('DENIED: Unable to update ' + book.entity._links.self.href +
-                    '. Your copy is stale.');
-            }
-        });
-    }
-
-    onDelete(book) {
-        client({
-            method: 'DELETE',
-            path: book.entity._links.self.href,
-            headers: {
-                csrfTokenHeader : csrfToken
-            }}
-        ).done(response => {/* let the websocket handle updating the UI */},
-            response => {
-                if (response.status.code === 403) {
-                    alert('ACCESS DENIED: You are not authorized to delete ' +
-                        book.entity._links.self.href);
-                }
-            });
     }
 
     onNavigate(navUri) {
@@ -227,19 +176,22 @@ class BookPage extends React.Component {
                 <div className="row">
                     {pageInfo}
                     <div className="float-xs-right">
-                        <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
+                        <a href="#createBook">Create</a>
                         <SelectItems pageSize={this.props.pageSize}
                                      updatePageSize={this.updatePageSize}/>
                     </div>
                 </div>
                 <BookList books={this.state.books}
                           pageSize={this.state.pageSize}
+                          page={this.state.page}
                           attributes={this.state.attributes}
                           onUpdate={this.onUpdate}
                           onDelete={this.onDelete}
+                          showUpdateWindow={this.showUpdateWindow}
                           updatePageSize={this.updatePageSize}/>
                 <NavLinks links={this.state.links}
                           onNavigate={this.onNavigate}/>
+              <BookModalDialog onCreate={this.onCreate}/>
             </div>
         )
     }
