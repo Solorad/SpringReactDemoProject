@@ -10,7 +10,6 @@ import BookList from "./BookList";
 import NavLinks from "./NavLinks";
 import BookModalDialog from "./BookModalDialog";
 import SelectItems from "./SelectItems"; // function to hop multiple links by "rel"
-import {Modal} from 'react-bootstrap';
 
 const root = '/api';
 
@@ -177,13 +176,12 @@ class BookPage extends React.Component {
         <div className="row">
           {pageInfo}
           <div className="float-xs-right">
-            <a href="#createBook">Create</a>
+            <a href="#modalBook">Create</a>
             <SelectItems pageSize={this.props.pageSize}
                          updatePageSize={this.updatePageSize}/>
           </div>
         </div>
         <BookList books={this.state.books}
-                  pageSize={this.state.pageSize}
                   page={this.state.page}
                   attributes={this.state.attributes}
                   showUpdateWindow={this.showUpdateWindow}

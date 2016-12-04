@@ -59,6 +59,8 @@ class BookModalDialog extends React.Component {
   }
 
   render() {
+    // TODO: rewrite all in such a way, that this modal dialog should be suitable
+    // as for book creation, so and for book update.
     return (
       <div>
         <div id="modalBook" className="modalDialog">
@@ -69,24 +71,24 @@ class BookModalDialog extends React.Component {
 
             <form>
               <div className="form-group row">
-                <label htmlFor={titleId} className="col-xs-2 col-form-label">Author</label>
-                <div className="col-xs-10">
-                  <input id={titleId}/>
+                <label htmlFor="authorInput" className="col-xs-3 col-form-label">Author</label>
+                <div className="col-xs-9">
+                  <input id="authorInput" name="author" type="text" className="form-control"/>
                 </div>
               </div>
               <div className="form-group row">
-                <label htmlFor={titleId} className="col-xs-2 col-form-label">Title</label>
-                <div className="col-xs-10">
-                  <input id={titleId}/>
+                <label htmlFor="titleInput" className="col-xs-3 col-form-label">Title</label>
+                <div className="col-xs-9">
+                  <input id="titleInput" name="title" type="text" className="form-control"/>
                 </div>
               </div>
               <div className="form-group row">
-                <label htmlFor={titleId} className="col-xs-2 col-form-label">Title</label>
-                <div className="col-xs-10">
-                  <input id={titleId}/>
+                <label htmlFor="descriptionInput" className="col-xs-3 col-form-label">Description</label>
+                <div className="col-xs-9">
+                  <textarea className="form-control" id="descriptionInput" name="description" rows="3"/>
                 </div>
               </div>
-              <button onClick={this.handleSubmit}>Create</button>
+              <button onClick={this.handleSubmit} className="btn btn-primary">Create</button>
             </form>
           </div>
         </div>

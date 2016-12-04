@@ -7,8 +7,9 @@ var BookList = React.createClass({
     var books = [];
     for(let i = 0; i < this.props.books.length; i++) {
       var curBook = this.props.books[i];
-      curBook.bookOrder = this.props.page * this.props.pageSize + i + 1;
+      curBook.bookOrder = this.props.page.number * this.props.page.size + i + 1;
       books.push(<Book book={curBook}
+                       key={curBook.entity._links.self.href}
                        showUpdateWindow={this.props.showUpdateWindow}/>);
     }
 

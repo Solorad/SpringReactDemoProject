@@ -30,7 +30,7 @@ class Book extends React.Component {
   render() {
     return (
       <tr>
-        <td>{this.props.book.entity.bookOrder}</td>
+        <td>{this.props.book.bookOrder}</td>
         <td>{this.props.book.entity.title}</td>
         <td>{this.props.book.entity.authors}</td>
         <td>{this.props.book.entity.description}</td>
@@ -38,7 +38,7 @@ class Book extends React.Component {
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>
-          <button onClick={this.showUpdateWindow} className="btn btn-link">Update</button>
+          <a href="#modalBook">Update</a>
         </td>
         <td>
           <button onClick={this.deleteBook} className="btn btn-warning">Delete</button>
