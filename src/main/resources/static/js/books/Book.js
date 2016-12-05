@@ -4,15 +4,11 @@ class Book extends React.Component {
   constructor(props) {
     super(props);
     this.deleteBook = this.deleteBook.bind(this);
-    this.showUpdateWindow = this.showUpdateWindow.bind(this);
+    this.showUpdateWindow = this.props.showUpdateWindow.bind(this);
   }
 
   handleDelete() {
     this.props.onDelete(this.props.book);
-  }
-
-  showUpdateWindow() {
-    this.props.showUpdateWindow(this.props.book);
   }
 
   deleteBook(book) {
