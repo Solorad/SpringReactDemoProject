@@ -9,19 +9,6 @@ class BookModalDialog extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    var newBook = {};
-    this.props.attributes.forEach(attribute => {
-      newBook[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-    });
-    this.props.onCreate(newBook);
-    this.props.attributes.forEach(attribute => {
-      ReactDOM.findDOMNode(this.refs[attribute]).value = ''; // clear out the dialog's inputs
-    });
-    window.location = "#";
-  }
-
   createBook(newBook) {
     client({
       method: 'POST',
@@ -58,9 +45,20 @@ class BookModalDialog extends React.Component {
     });
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    var newBook = {};
+    this.props.attributes.forEach(attribute => {
+      newBook[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+    });
+    this.createBook(newBook);
+    this.props.attributes.forEach(attribute => {
+      ReactDOM.findDOMNode(this.refs[attribute]).value = ''; // clear out the dialog's inputs
+    });
+    window.location = "#";
+  }
+
   render() {
-    // TODO: rewrite all in such a way, that this modal dialog should be suitable
-    // as for book creation, so and for book update.
     return (
       <div>
         <div id="modalBook" className="modalDialog">

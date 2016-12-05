@@ -38,7 +38,7 @@ class Book extends React.Component {
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>
-          <a href="#modalBook">Update</a>
+          <button onClick={this.showUpdateWindow} className="btn btn-link">Update</button>
         </td>
         <td>
           <button onClick={this.deleteBook} className="btn btn-warning">Delete</button>
