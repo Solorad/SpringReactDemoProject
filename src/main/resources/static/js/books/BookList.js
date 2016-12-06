@@ -1,38 +1,39 @@
-import React from 'react';
-import Book from './Book';
+import React from "react";
+import Book from "./Book";
 
 var BookList = React.createClass({
 
-    render() {
-        var employees = this.props.employees.map(employees =>
-            <Book key={employees.entity._links.self.href}
-                      employees={employees}
-                      attributes={this.props.attributes}
-                      onUpdate={this.props.onUpdate}
-                      onDelete={this.props.onDelete}/>
-        );
-
-        return (
-            <div className="row">
-                <table className="table table-striped book-table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Description</th>
-                        <th>Year</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {employees}
-                    </tbody>
-                </table>
-            </div>
-        )
+  render() {
+    var books = [];
+    for(let i = 0; i < this.props.books.length; i++) {
+      var curBook = this.props.books[i];
+      curBook.bookOrder = this.props.page.number * this.props.page.size + i + 1;
+      books.push(<Book book={curBook}
+                       key={curBook.entity._links.self.href}
+                       showUpdateWindow={this.props.showUpdateWindow}/>);
     }
+
+    return (
+      <div className="row">
+        <table className="table table-striped book-table">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Description</th>
+            <th>Published</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+          </tr>
+          </thead>
+          <tbody>
+          {books}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
 });
 
 export default BookList;

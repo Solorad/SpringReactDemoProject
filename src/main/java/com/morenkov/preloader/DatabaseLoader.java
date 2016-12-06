@@ -1,6 +1,8 @@
 package com.morenkov.preloader;
 
+import com.morenkov.entity.Book;
 import com.morenkov.entity.Employee;
+import com.morenkov.repository.BookRepository;
 import com.morenkov.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,14 +21,47 @@ import java.util.Set;
 public class DatabaseLoader implements CommandLineRunner {
 
     private final EmployeeRepository employeeRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public DatabaseLoader(EmployeeRepository employeeRepository) {
+    public DatabaseLoader(EmployeeRepository employeeRepository, BookRepository bookRepository) {
         this.employeeRepository = employeeRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
     public void run(String... strings) throws Exception {
+//        addUsers();
+//        addBooks();
+    }
+
+    private void addBooks() {
+        Set<String> authors = new HashSet<>();
+        authors.add("J.R.R. Tolkien");
+        Book lordOfTheRings = Book.builder().title("Lord of the rings").authors(authors)
+                .description("Description").likeNumber(3).pageNumber(2300).build();
+        bookRepository.save(lordOfTheRings);
+
+        authors = new HashSet<>();
+        authors.add("L.N. Tolstoy");
+        Book warAndPeace = Book.builder().title("War and Peace").authors(authors)
+                .description("Description").likeNumber(1).pageNumber(1200).build();
+        bookRepository.save(warAndPeace);
+
+        authors = new HashSet<>();
+        authors.add("J. D. Salinger");
+        Book catcher = Book.builder().title("Catcher in the rye").authors(authors)
+                .description("Description").likeNumber(2).pageNumber(1000).build();
+        bookRepository.save(catcher);
+
+        authors = new HashSet<>();
+        authors.add("Erich Maria Remarque");
+        Book threeComrades = Book.builder().title("Three Comrades").authors(authors)
+                .description("Description").likeNumber(7).pageNumber(429).build();
+        bookRepository.save(threeComrades);
+    }
+
+    private void addUsers() {
         Set<String> adminRoles = new HashSet<>();
         adminRoles.add("ROLE_USER");
         adminRoles.add("ROLE_ADMIN");
