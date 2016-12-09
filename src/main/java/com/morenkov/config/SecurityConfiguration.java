@@ -33,27 +33,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/built/**",
-                        "/main.css",
-                        "/auth/**",
-                        "/login",
-                        "/signup/**",
-                        "/user/register/**").permitAll()
-                    .antMatchers("/**").hasRole("USER")
-                    .anyRequest().authenticated()
+                .antMatchers("/built/**", "/main.css").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login/authenticate")
-                    .failureUrl("/login?error=bad_credentials")
-                    .defaultSuccessUrl("/", true)
-                    .permitAll()
+                .defaultSuccessUrl("/", true)
+                .permitAll()
                 .and()
-                    .httpBasic()
+                .httpBasic()
                 .and()
-                    .apply(new SpringSocialConfigurer())
-                .and()
-                    .logout()
+                .logout()
                 .logoutSuccessUrl("/");
     }
 
