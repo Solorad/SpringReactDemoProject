@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  * @author Evgenii Morenkov
@@ -32,16 +33,27 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/built/**", "/main.css").permitAll()
-                .anyRequest().authenticated()
+                    .antMatchers("/built/**",
+                        "/main.css",
+                        "/auth/**",
+                        "/login",
+                        "/signup/**",
+                        "/user/register/**").permitAll()
+                    .antMatchers("/**").hasRole("USER")
+                    .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/", true)
-                .permitAll()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login/authenticate")
+                    .failureUrl("/login?error=bad_credentials")
+                    .defaultSuccessUrl("/", true)
+                    .permitAll()
                 .and()
-                .httpBasic()
+                    .httpBasic()
                 .and()
-                .logout()
+                    .apply(new SpringSocialConfigurer())
+                .and()
+                    .logout()
                 .logoutSuccessUrl("/");
     }
 
