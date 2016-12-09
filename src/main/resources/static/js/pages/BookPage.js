@@ -6,15 +6,12 @@ import when from "when";
 import client from "../common/client";
 import stompClient from "../common/websocket-listener";
 import follow from "../common/follow";
-import BookList from "./BookList";
-import NavLinks from "./NavLinks";
-import BookModalDialog from "./BookModalDialog";
-import SelectItems from "./SelectItems"; // function to hop multiple links by "rel"
+import BookList from "../books/BookList";
+import NavLinks from "../books/NavLinks";
+import BookModalDialog from "../books/BookModalDialog";
+import SelectItems from "../books/SelectItems"; // function to hop multiple links by "rel"
 
 const root = '/api';
-
-const csrfTokenHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 
 class BookPage extends React.Component {
 
@@ -23,7 +20,6 @@ class BookPage extends React.Component {
     this.state = {
       books: [], attributes: [],
       page: 1, pageSize: 2, links: {},
-      csrfTokenHeader, csrfToken
     };
     this.updatePageSize = this.updatePageSize.bind(this);
     this.onNavigate = this.onNavigate.bind(this);
