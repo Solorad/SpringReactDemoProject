@@ -3,7 +3,13 @@ import {Route, IndexRoute} from "react-router";
 import BookPage from "./pages/BookPage";
 import Page404 from "./pages/Page404";
 
-function AppRouter({url}) {
+function App({ url }) {
+  return (
+    <div className="app">
+      App
+    </div>
+  );
+
   const isAuthenticated = document.querySelector('meta[name="isAuthenticated"]').getAttribute('content');
   const csrfTokenHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
   const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -21,5 +27,5 @@ function AppRouter({url}) {
 }
 
 export default (
-  <Route path="*" component={AppRouter}/>
+  <Route path="*" component={App}/>
 );
