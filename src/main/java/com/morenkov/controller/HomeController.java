@@ -3,6 +3,8 @@ package com.morenkov.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 /**
  * @author emorenkov
  */
@@ -14,4 +16,13 @@ public class HomeController {
         return "index";
     }
 
+    @RequestMapping(value = "/login")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping("/user")
+    public Principal user(Principal principal) {
+        return principal;
+    }
 }

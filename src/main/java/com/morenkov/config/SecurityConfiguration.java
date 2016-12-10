@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  * @author Evgenii Morenkov
@@ -33,17 +32,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/built/**", "/main.css").permitAll()
+                .antMatchers("/built/**", "/main.css", "/login**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/", true)
-                .permitAll()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login/authenticate")
+                    .failureUrl("/login?error=bad_credentials")
+                    .defaultSuccessUrl("/", true)
+                    .permitAll()
                 .and()
-                .httpBasic()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/");
+                    .logout()
+                    .logoutSuccessUrl("/");
     }
 
 }
