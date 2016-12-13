@@ -1,5 +1,3 @@
-'use strict';
-
 import React from "react";
 import "babel-polyfill";
 import when from "when";
@@ -13,7 +11,7 @@ import SelectItems from "../books/SelectItems"; // function to hop multiple link
 
 const root = '/api';
 
-class BookPage extends React.Component {
+function BookPage {
 
   constructor(props) {
     super(props);
@@ -165,16 +163,11 @@ class BookPage extends React.Component {
   }
 
   render() {
-    var pageInfo = this.state.page.hasOwnProperty("number") ?
-      <h3 className="col-xs-4">Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
     return (
       <div>
         <div className="row">
-          {pageInfo}
           <div className="float-xs-right">
             <a href="#modalBook">Create</a>
-            <SelectItems pageSize={this.props.pageSize}
-                         updatePageSize={this.updatePageSize}/>
           </div>
         </div>
         <BookList books={this.state.books}
@@ -188,6 +181,49 @@ class BookPage extends React.Component {
       </div>
     )
   }
+
+  const data = ajax.get({ page, limit });
+  const totalPages = data.page.totalPages;
+  const lastPage = totalPages - 1;
+  const books = data._embedded.books;
+  const bookParam = location.query && location.query.book;
+
+  console.log(bookParam);
+
+  if (page < 0 || page > lastPage || limit < 1) {
+    return <div>404</div>;
+  }
+
+  return (
+    <div className="books">
+      <div className="books__header">
+        <div className="books__title">Books — Page {page + 1} of {totalPages}</div>
+        <div className="books__controls">
+          <Link
+            className="books__create"
+            to={location.pathname + location.search + (location.search ? '&book=new' : '?book=new')}
+          >
+            Create
+          </Link>
+        </div>
+      </div>
+      <div className="books__table">
+        <BooksTable books={books} pageSize={limit} page={page} />
+      </div>
+      <div className="books__paginator">
+        <PaginatorLink page="0" limit={limit} disabled={page === 0}>&lt;&lt;</PaginatorLink>
+        <PaginatorLink page={page - 1} limit={limit} disabled={page === 0}>&lt;</PaginatorLink>
+        <PaginatorLink page={page + 1} limit={limit} disabled={page === lastPage}>&gt;</PaginatorLink>
+        <PaginatorLink page={lastPage} limit={limit} disabled={page === lastPage}>&gt;&gt;</PaginatorLink>
+      </div>
+
+      {bookParam && (
+        <Modal closeUrl={`/books?page=${page}&limit=${limit}`}>
+          <BookEditor book={bookParam === 'new' ? null : null  } />
+        </Modal>
+      )}
+    </div>
+  );
 }
 
 export default BookPage;

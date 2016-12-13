@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, browserHistory } from 'react-router';
-import Routes from './Router';
+import App from './App';
 
 // We require the routes and render to the DOM using ReactDOM API
 ReactDOM.render(
-    <Router history={browserHistory} routes={Routes} />,
+    (<Router history={browserHistory}>
+        <Route path="*" component={App} />
+    </Router>),
     document.getElementById('react')
 );
