@@ -4,21 +4,17 @@
     <meta charset="UTF-8"/>
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <meta name="isAuthenticated" content="${#authorization.expression('isAuthenticated()')}"/>
     <title>Book Corner</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content="Book Corner"/>
     <meta name="author" content="Morenkov Evgenii"/>
 
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
-
-<div id="react" class="container"></div>
+<div id="root"></div>
 
 <script src="built/bundle.js"></script>
 

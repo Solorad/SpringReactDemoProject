@@ -33,7 +33,7 @@
     "eslint": "eslint .; exit 0",
     "eslint-components": "eslint src/main/resources/static; exit 0",
     "build": "mvn -q clean compile && npm install && webpack",
-    "serve": "mvn -q clean spring-boot:run",
+    "serve": "webpack && mvn -q clean spring-boot:run",
     "all": "npm install && webpack && mvn -q clean spring-boot:run"
   },
   "devDependencies": {
