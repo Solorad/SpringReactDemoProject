@@ -1,12 +1,13 @@
 import React from "react";
 import "babel-polyfill";
 import stompClient from "../common/websocket-listener"; // function to hop multiple links by "rel"
+import ajax from '../common/ajax';
 
 import BooksTable from "../books/BooksTable";
 
 
 function BookPage({page, limit}) {
-  const data = ajax.get({page, limit});
+  const data = ajax.get("/api/books?page=" + page + "&limit=" + limit);
   const totalPages = data.page.totalPages;
   const lastPage = totalPages - 1;
   const books = data._embedded.books;
