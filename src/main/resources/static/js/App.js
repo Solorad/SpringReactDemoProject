@@ -19,7 +19,7 @@ function App({location}) {
   }
 
   const page = Number(location.query.page) || 0;
-  const limit = Number(location.query.limit) || DEFAULT_LIMIT;
+  const size = Number(location.query.size) || DEFAULT_LIMIT;
   console.log("t4werwer");
 
   return (
@@ -27,7 +27,7 @@ function App({location}) {
       <Header currentUrl={url}/>
       {(url === '/books'
           ? <BookPage csrfTokenHeader={csrfTokenHeader}
-                      csrfToken={csrfToken} page={page} limit={limit}/> :
+                      csrfToken={csrfToken} page={page} size={size}/> :
           <Page404 />
       )}
     </div>

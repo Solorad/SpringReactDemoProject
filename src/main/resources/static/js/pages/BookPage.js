@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import "babel-polyfill";
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import stompClient from "../common/websocket-listener"; // function to hop multiple links by "rel"
 import request from '../common/ajax';
 
@@ -16,13 +16,15 @@ class BookPage extends Component {
       totalPages : 1,
       lastPage : 1
     };
+    this.updateSelect = this.updateSelect.bind(this)
   }
 
   componentDidMount() {
-    request("/api/books?page=" + this.props.page + "&limit=" + this.props.limit)
+    request("/api/books?page=" + this.props.page + "&size=" + this.props.size)
       .then((data) => {
+        const totalPages = data.page.totalPages;
         this.setState({
-          totalPages: data.page.totalPages,
+          totalPages,
           lastPage: totalPages - 1,
           books: data._embedded.books,
           bookParam: location.query && location.query.book,
@@ -30,7 +32,7 @@ class BookPage extends Component {
       });
 
 
-    if (this.props.page < 0 || this.state.page > this.state.lastPage || this.props.limit < 1) {
+    if (this.props.page < 0 || this.state.page > this.state.lastPage || this.props.size < 1) {
       return <div>404</div>;
     }
 
@@ -42,8 +44,9 @@ class BookPage extends Component {
   }
 
   updateSelect(event) {
-    console.log(event);
-    window.location.href = event.value;
+    // this.props.size = event.target.value;
+    browserHistory.replace('/books?size=' + event.target.value);
+    // componentDidMount();
   }
 
   render() {
@@ -60,29 +63,29 @@ class BookPage extends Component {
             >
               Create
             </Link>
-            <select onChange={this.updateSelect}>
-              <option value="/books?limit=2">2</option>
-              <option value="/books?limit=5">5</option>
-              <option value="/books?limit=7">7</option>
-              <option value="/books?limit=10">10</option>
+            <select onChange={this.updateSelect} value={this.props.size}>
+              <option value="2">2</option>
+              <option value="5">5</option>
+              <option value="7">7</option>
+              <option value="10">10</option>
             </select>
           </div>
         </div>
         <div className="books__table">
-          <BooksTable books={this.state.books} pageSize={this.props.limit} page={this.props.page}/>
+          <BooksTable books={this.state.books} pageSize={this.props.size} page={this.props.page}/>
         </div>
         <div className="books__paginator">
-          <PaginatorLink page="0" limit={this.props.limit} disabled={this.props.page === 0}>&lt;&lt;</PaginatorLink>
-          <PaginatorLink page={this.props.page - 1} limit={this.props.limit}
+          <PaginatorLink page="0" size={this.props.size} disabled={this.props.page === 0}>&lt;&lt;</PaginatorLink>
+          <PaginatorLink page={this.props.page - 1} size={this.props.size}
                          disabled={this.props.page === 0}>&lt;</PaginatorLink>
-          <PaginatorLink page={this.props.page + 1} limit={this.props.limit}
+          <PaginatorLink page={this.props.page + 1} size={this.props.size}
                          disabled={this.props.page === this.state.lastPage}>&gt;</PaginatorLink>
-          <PaginatorLink page={this.state.lastPage} limit={this.props.limit}
+          <PaginatorLink page={this.state.lastPage} size={this.props.size}
                          disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
         {this.state.bookParam && (
-          <Modal closeUrl={`/books?page=${this.props.page}&limit=${this.props.limit}`}>
+          <Modal closeUrl={`/books?page=${this.props.page}&size=${this.props.size}`}>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
         )}
@@ -91,11 +94,11 @@ class BookPage extends Component {
   }
 }
 
-function PaginatorLink({page, limit, disabled, children}) {
+function PaginatorLink({page, size, disabled, children}) {
   return (
     <Link
       className="books__paginatorLink"
-      to={disabled ? null : `/books?page=${page}&limit=${limit}`}
+      to={disabled ? null : `/books?page=${page}&size=${size}`}
     >
       {children}
     </Link>

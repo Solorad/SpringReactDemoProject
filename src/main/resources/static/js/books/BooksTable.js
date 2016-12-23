@@ -17,8 +17,8 @@ function BooksTable({ books, page, pageSize }) {
       </thead>
       <tbody>
         {books.map((book, i) => (
-          <tr>
-            <td>{i + page * pageSize}</td>
+          <tr key={book.id}>
+            <td>{i + page * pageSize + 1}</td>
             <td>{book.title}</td>
             <td>{book.authors}</td>
             <td>{book.description}</td>
