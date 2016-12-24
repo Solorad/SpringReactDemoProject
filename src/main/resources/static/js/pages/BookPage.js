@@ -7,6 +7,8 @@ import request from '../common/ajax';
 import BooksTable from "../books/BooksTable";
 
 
+const DEFAULT_LIMIT = 5;
+
 class BookPage extends Component {
   constructor(props) {
     super(props);
@@ -14,13 +16,13 @@ class BookPage extends Component {
       books : [],
       page : 0,
       totalPages : 1,
-      lastPage : 1
+      lastPage : 1,
+      size: props.initSize,
     };
-    this.updateSelect = this.updateSelect.bind(this)
   }
 
   componentDidMount() {
-    request("/api/books?page=" + this.props.page + "&size=" + this.props.size)
+    request("/api/books?page=" + this.props.page + "&size=" + this.state.size)
       .then((data) => {
         const totalPages = data.page.totalPages;
         this.setState({
@@ -32,7 +34,7 @@ class BookPage extends Component {
       });
 
 
-    if (this.props.page < 0 || this.state.page > this.state.lastPage || this.props.size < 1) {
+    if (this.props.page < 0 || this.state.page > this.state.lastPage || this.state.size < 1) {
       return <div>404</div>;
     }
 
@@ -44,14 +46,12 @@ class BookPage extends Component {
   }
 
   updateSelect(event) {
-    // this.props.size = event.target.value;
+    this.state.size = event.target.value;
     browserHistory.replace('/books?size=' + event.target.value);
-    // componentDidMount();
+    this.componentDidMount();
   }
 
   render() {
-
-
     return (
       <div className="books">
         <div className="books__header">
@@ -63,7 +63,7 @@ class BookPage extends Component {
             >
               Create
             </Link>
-            <select onChange={this.updateSelect} value={this.props.size}>
+            <select onChange={this.updateSelect.bind(this)} value={this.state.size}>
               <option value="2">2</option>
               <option value="5">5</option>
               <option value="7">7</option>
@@ -72,20 +72,20 @@ class BookPage extends Component {
           </div>
         </div>
         <div className="books__table">
-          <BooksTable books={this.state.books} pageSize={this.props.size} page={this.props.page}/>
+          <BooksTable books={this.state.books} pageSize={this.state.size} page={this.props.page}/>
         </div>
         <div className="books__paginator">
-          <PaginatorLink page="0" size={this.props.size} disabled={this.props.page === 0}>&lt;&lt;</PaginatorLink>
-          <PaginatorLink page={this.props.page - 1} size={this.props.size}
+          <PaginatorLink page="0" size={this.state.size} disabled={this.props.page === 0}>&lt;&lt;</PaginatorLink>
+          <PaginatorLink page={this.props.page - 1} size={this.state.size}
                          disabled={this.props.page === 0}>&lt;</PaginatorLink>
-          <PaginatorLink page={this.props.page + 1} size={this.props.size}
+          <PaginatorLink page={this.props.page + 1} size={this.state.size}
                          disabled={this.props.page === this.state.lastPage}>&gt;</PaginatorLink>
-          <PaginatorLink page={this.state.lastPage} size={this.props.size}
+          <PaginatorLink page={this.state.lastPage} size={this.state.size}
                          disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
         {this.state.bookParam && (
-          <Modal closeUrl={`/books?page=${this.props.page}&size=${this.props.size}`}>
+          <Modal closeUrl={`/books?page=${this.props.page}&size=${this.state.size}`}>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
         )}

@@ -27,7 +27,7 @@ function App({location}) {
       <Header currentUrl={url}/>
       {(url === '/books'
           ? <BookPage csrfTokenHeader={csrfTokenHeader}
-                      csrfToken={csrfToken} page={page} size={size}/> :
+                      csrfToken={csrfToken} page={page} initSize={size}/> :
           <Page404 />
       )}
     </div>
