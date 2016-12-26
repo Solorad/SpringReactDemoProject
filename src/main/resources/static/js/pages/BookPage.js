@@ -3,11 +3,11 @@ import "babel-polyfill";
 import {Link, browserHistory} from 'react-router';
 import stompClient from "../common/websocket-listener"; // function to hop multiple links by "rel"
 import request from '../common/ajax';
+import Modal from '../common/Modal';
 
 import BooksTable from "../books/BooksTable";
+import BookEditor from "../books/BookEditor";
 
-
-const DEFAULT_LIMIT = 5;
 
 class BookPage extends Component {
   constructor(props) {
@@ -19,22 +19,16 @@ class BookPage extends Component {
       lastPage : 1,
       size: props.initSize,
     };
+
+    this.updateSelect = this.updateSelect.bind(this);
+    this.createBook = this.createBook.bind(this);
   }
 
   componentDidMount() {
-    request("/api/books?page=" + this.props.page + "&size=" + this.state.size)
-      .then((data) => {
-        const totalPages = data.page.totalPages;
-        this.setState({
-          totalPages,
-          lastPage: totalPages - 1,
-          books: data._embedded.books,
-          bookParam: location.query && location.query.book,
-        });
-      });
+    this.loadDataFromServer();
 
 
-    if (this.props.page < 0 || this.state.page > this.state.lastPage || this.state.size < 1) {
+    if (this.props.page < 0 || this.props.page > this.state.lastPage || this.state.size < 1) {
       return <div>404</div>;
     }
 
@@ -45,10 +39,27 @@ class BookPage extends Component {
     // ]);
   }
 
+  loadDataFromServer() {
+    request("/api/books?page=" + this.props.page + "&size=" + this.state.size)
+      .then((data) => {
+        const totalPages = data.page.totalPages;
+        this.setState({
+          totalPages,
+          lastPage: totalPages - 1,
+          books: data._embedded.books,
+        });
+      });
+  }
+
   updateSelect(event) {
     this.state.size = event.target.value;
     browserHistory.replace('/books?size=' + event.target.value);
-    this.componentDidMount();
+    this.loadDataFromServer();
+  }
+
+  createBook() {
+    console.log("New Book here!");
+    this.setState({bookParam : this.state});
   }
 
   render() {
@@ -57,13 +68,10 @@ class BookPage extends Component {
         <div className="books__header">
           <div className="books__title">Books — Page {this.props.page + 1} of {this.state.totalPages}</div>
           <div className="books__controls">
-            <Link
-              className="books__create"
-              to={location.pathname + location.search + (location.search ? '&book=new' : '?book=new')}
-            >
-              Create
-            </Link>
-            <select onChange={this.updateSelect.bind(this)} value={this.state.size}>
+            <button onClick={this.createBook} className="books__create">
+            Create
+            </button>
+            <select onChange={this.updateSelect} value={this.state.size}>
               <option value="2">2</option>
               <option value="5">5</option>
               <option value="7">7</option>
