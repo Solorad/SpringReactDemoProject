@@ -1,10 +1,13 @@
 import React from 'react';
 
+function handleSubmit() {}
+
 function BookEditor({ book }) {
   return (
-    <div className="book editor">
+    <form className="book_editor" onSubmit={handleSubmit}>
+
       {book ? 'edit book' : 'new book'}
-    </div>
+    </form>
   );
 }
 
