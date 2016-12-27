@@ -22,6 +22,7 @@ class BookPage extends Component {
 
     this.updateSelect = this.updateSelect.bind(this);
     this.createBook = this.createBook.bind(this);
+    this.onCloseModal = this.onCloseModal.bind(this);
   }
 
   componentDidMount() {
@@ -49,6 +50,10 @@ class BookPage extends Component {
           books: data._embedded.books,
         });
       });
+  }
+
+  onCloseModal() {
+    this.setState({bookParam : null});
   }
 
   updateSelect(event) {
@@ -93,7 +98,7 @@ class BookPage extends Component {
         </div>
 
         {this.state.bookParam && (
-          <Modal closeUrl={`/books?page=${this.props.page}&size=${this.state.size}`}>
+          <Modal closeAction={this.onCloseModal}>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
         )}

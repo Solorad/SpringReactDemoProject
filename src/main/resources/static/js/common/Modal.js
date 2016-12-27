@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-function Modal({ closeUrl, children }) {
+function Modal({ closeAction, children }) {
   return (
-    <Link className="modal" to={closeUrl}>
+    <div className="modal" onClick={closeAction}>
       <div className="modal__content">
         {children}
       </div>
-    </Link>
+    </div>
   );
 }
 
