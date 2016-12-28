@@ -1,23 +1,22 @@
 import React, {Component} from "react";
 import "babel-polyfill";
-import {Link, browserHistory} from 'react-router';
-import stompClient from "../common/websocket-listener"; // function to hop multiple links by "rel"
-import request from '../common/ajax';
-import Modal from '../common/Modal';
-
+import {Link, browserHistory} from "react-router";
+import request from "../common/ajax";
+import Modal from "../common/Modal";
 import BooksTable from "../books/BooksTable";
-import BookEditor from "../books/BookEditor";
+import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
 
 
 class BookPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books : [],
-      page : 0,
-      totalPages : 1,
-      lastPage : 1,
+      books: [],
+      page: 0,
+      totalPages: 1,
+      lastPage: 1,
       size: props.initSize,
+      editBook: location.search && location.search.contains('state'),
     };
 
     this.updateSelect = this.updateSelect.bind(this);
@@ -53,7 +52,9 @@ class BookPage extends Component {
   }
 
   onCloseModal() {
-    this.setState({bookParam : null});
+    this.setState({
+      editBook: false,
+    });
   }
 
   updateSelect(event) {
@@ -64,7 +65,11 @@ class BookPage extends Component {
 
   createBook() {
     console.log("New Book here!");
-    this.setState({bookParam : this.state});
+    browserHistory.replace(location.pathname + location.search + (location.search ? '&state=new' : '?state=new'));
+    this.setState({
+      selectedBook: null,
+      editBook: true,
+    });
   }
 
   render() {
@@ -74,7 +79,7 @@ class BookPage extends Component {
           <div className="books__title">Books — Page {this.props.page + 1} of {this.state.totalPages}</div>
           <div className="books__controls">
             <button onClick={this.createBook} className="books__create">
-            Create
+              Create
             </button>
             <select onChange={this.updateSelect} value={this.state.size}>
               <option value="2">2</option>
@@ -97,7 +102,7 @@ class BookPage extends Component {
                          disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
-        {this.state.bookParam && (
+        {this.state.editBook && (
           <Modal closeAction={this.onCloseModal}>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
