@@ -16,7 +16,7 @@ class BookPage extends Component {
       totalPages: 1,
       lastPage: 1,
       size: props.initSize,
-      editBook: location.search && location.search.contains('state'),
+      editBook: location.search && location.search.indexOf('state') != -1,
     };
 
     this.updateSelect = this.updateSelect.bind(this);
