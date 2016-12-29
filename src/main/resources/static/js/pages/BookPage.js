@@ -16,17 +16,13 @@ class BookPage extends Component {
       totalPages: 1,
       lastPage: 1,
       size: props.initSize,
-      editBook: location.search && location.search.indexOf('state') != -1,
     };
 
     this.updateSelect = this.updateSelect.bind(this);
-    this.createBook = this.createBook.bind(this);
-    this.onCloseModal = this.onCloseModal.bind(this);
   }
 
   componentDidMount() {
     this.loadDataFromServer();
-
 
     if (this.props.page < 0 || this.props.page > this.state.lastPage || this.state.size < 1) {
       return <div>404</div>;
@@ -51,36 +47,23 @@ class BookPage extends Component {
       });
   }
 
-  onCloseModal() {
-    this.setState({
-      editBook: false,
-    });
-  }
-
   updateSelect(event) {
     this.state.size = event.target.value;
     browserHistory.replace('/books?size=' + event.target.value);
     this.loadDataFromServer();
   }
 
-  createBook() {
-    console.log("New Book here!");
-    browserHistory.replace(location.pathname + location.search + (location.search ? '&state=new' : '?state=new'));
-    this.setState({
-      selectedBook: null,
-      editBook: true,
-    });
-  }
-
   render() {
+    const editBook =  location.query && location.query.editBook;
+
     return (
       <div className="books">
         <div className="books__header">
           <div className="books__title">Books — Page {this.props.page + 1} of {this.state.totalPages}</div>
           <div className="books__controls">
-            <button onClick={this.createBook} className="books__create">
+            <Link to={{pathname: '/books', query: { editBook: true }}} className="books__create" activeClassName="active">
               Create
-            </button>
+            </Link>
             <select onChange={this.updateSelect} value={this.state.size}>
               <option value="2">2</option>
               <option value="5">5</option>
@@ -102,7 +85,7 @@ class BookPage extends Component {
                          disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
-        {this.state.editBook && (
+        {editBook && (
           <Modal closeAction={this.onCloseModal}>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>

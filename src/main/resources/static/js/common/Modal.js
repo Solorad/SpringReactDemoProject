@@ -8,11 +8,11 @@ function onModalClick(event) {
 
 function Modal({ closeAction, children }) {
   return (
-    <div className="modal" onClick={closeAction}>
+    <Link to={{query: { editBook: false }}} activeClassName="active">
       <div className="modal__content" onClick={onModalClick}>
         {children}
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -12,10 +12,10 @@ class BookEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: props.book ? props.book.id : null,
-      title: props.book ? props.book.title : null,
-      authors: props.book ? props.book.authors : null,
-      description: props.book ? props.book.description : null,
+      id: props.book ? props.book.id : '',
+      title: props.book ? props.book.title : '',
+      authors: props.book ? props.book.authors : '',
+      description: props.book ? props.book.description : '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -47,19 +47,24 @@ class BookEditor extends Component {
     return (
       <form className="book_editor" onSubmit={handleSubmit}>
         <input type="hidden" name="book_id" value={this.state.id}/>
-        <label>
-          Title
-          <input type="text" name="title" value={this.state.title} onChange={this.onTitleChange}/>
-        </label>
-        <label>
-          Authors
-          <input type="text" value={this.state.authors} onChange={this.onAuthorChange}/>
-        </label>
-        <label>
-          Description
-          <textarea value={this.state.description} onChange={this.onDescriptionChange}/>
-        </label>
-
+        <div className="editor__row">
+          <label>
+            Title
+            <input type="text" name="title" value={this.state.title} onChange={this.onTitleChange}/>
+          </label>
+        </div>
+        <div className="editor__row">
+          <label>
+            Authors
+            <input type="text" value={this.state.authors} onChange={this.onAuthorChange}/>
+          </label>
+        </div>
+        <div className="editor__row">
+          <label>
+            Description
+            <textarea value={this.state.description} onChange={this.onDescriptionChange}/>
+          </label>
+          </div>
         <input type="Submit" value="Submit"/>
       </form>
     );
