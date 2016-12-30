@@ -7,15 +7,17 @@ import BooksTable from "../books/BooksTable";
 import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
 
 
+const DEFAULT_LIMIT = 5;
+
 class BookPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       books: [],
-      page: 0,
+      page: Number(props.location.query.page) || 0,
       totalPages: 1,
       lastPage: 1,
-      size: props.initSize,
+      size: Number(props.location.query.size) || DEFAULT_LIMIT,
     };
 
     this.updateSelect = this.updateSelect.bind(this);
@@ -54,8 +56,7 @@ class BookPage extends Component {
   }
 
   render() {
-    const editBook =  location.query && location.query.editBook;
-
+    const editBook =  this.props.location.query && this.props.location.query.editBook;
     return (
       <div className="books">
         <div className="books__header">

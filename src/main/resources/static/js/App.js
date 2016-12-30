@@ -4,8 +4,6 @@ import BookPage from "./pages/BookPage";
 import Page404 from "./pages/Page404";
 import Header from "./common/Header";
 
-const DEFAULT_LIMIT = 5;
-
 
 function App({location}) {
 
@@ -18,16 +16,12 @@ function App({location}) {
     return null;
   }
 
-  const page = Number(location.query.page) || 0;
-  const size = Number(location.query.size) || DEFAULT_LIMIT;
-  console.log("t4werwer");
-
   return (
     <div className="app">
       <Header currentUrl={url}/>
       {(url === '/books'
           ? <BookPage csrfTokenHeader={csrfTokenHeader}
-                      csrfToken={csrfToken} page={page} initSize={size}/> :
+                      csrfToken={csrfToken} location={location}/> :
           <Page404 />
       )}
     </div>
