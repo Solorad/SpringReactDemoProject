@@ -86,8 +86,8 @@ class BookPage extends Component {
                          disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
-        {editBook && (
-          <Modal closeAction={this.onCloseModal}>
+        {editBook ==='true' && (
+          <Modal backUrl='/books'>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
         )}

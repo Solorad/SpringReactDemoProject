@@ -19,12 +19,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 100;
 }
 
 .modal__content {
     width: 600px;
     background: #fff;
     min-height: 500px;
+    z-index: 200;
 }
 
 .books__paginatorLink {

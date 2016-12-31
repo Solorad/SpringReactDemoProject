@@ -2,12 +2,6 @@ import React, {Component} from "react";
 import request from "../common/ajax";
 
 
-function handleSubmit(event) {
-  console.log(event);
-  const body = {};
-  request("/api/books", "POST", body)
-}
-
 class BookEditor extends Component {
   constructor(props) {
     super(props);
@@ -19,13 +13,13 @@ class BookEditor extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onTitleChange = this.onTitleChange.bind(this);
     this.onAuthorChange = this.onAuthorChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
   }
 
 
   handleSubmit(event) {
-    console.log(event);
     const body = this.state;
     console.log(body);
     request("/api/books", "POST", body)
@@ -45,8 +39,8 @@ class BookEditor extends Component {
 
   render() {
     return (
-      <form className="book_editor" onSubmit={handleSubmit}>
-        <input type="hidden" name="book_id" value={this.state.id}/>
+      <div>
+      {/*<div className="book_editor" onSubmit={this.handleSubmit}>*/}
         <div className="editor__row">
           <label>
             Title
@@ -64,9 +58,9 @@ class BookEditor extends Component {
             Description
             <textarea value={this.state.description} onChange={this.onDescriptionChange}/>
           </label>
-          </div>
+        </div>
         <input type="Submit" value="Submit"/>
-      </form>
+      </div>
     );
   }
 }

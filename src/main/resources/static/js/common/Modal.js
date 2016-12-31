@@ -6,9 +6,9 @@ function onModalClick(event) {
   event.stopPropagation();
 }
 
-function Modal({ closeAction, children }) {
+function Modal({ backUrl, children }) {
   return (
-    <Link to={{query: { editBook: false }}} activeClassName="active">
+    <Link to={{pathname: backUrl}} activeClassName="active" className="modal">
       <div className="modal__content" onClick={onModalClick}>
         {children}
       </div>
