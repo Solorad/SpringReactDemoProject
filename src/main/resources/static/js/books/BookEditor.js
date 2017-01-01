@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import request from "../common/ajax";
+import axios from "axios";
 
 
 class BookEditor extends Component {
@@ -22,19 +22,19 @@ class BookEditor extends Component {
   handleSubmit(event) {
     const body = this.state;
     console.log(body);
-    request("/api/books", "POST", body)
+    axios.post("/api/books", "POST", body)
   }
 
   onTitleChange(event) {
-
+    this.setState({title : event.target.value})
   }
 
   onAuthorChange(event) {
-
+    this.setState({authors : event.target.value})
   }
 
   onDescriptionChange(event) {
-
+    this.setState({description : event.target.value})
   }
 
   render() {

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import "babel-polyfill";
 import {Link, browserHistory} from "react-router";
-import request from "../common/ajax";
+import axios from "axios";
 import Modal from "../common/Modal";
 import BooksTable from "../books/BooksTable";
 import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
@@ -46,7 +46,7 @@ class BookPage extends Component {
   }
 
   loadDataFromServer() {
-    request("/api/books?page=" + this.state.page + "&size=" + this.state.size)
+    axios.get("/api/books?page=" + this.state.page + "&size=" + this.state.size)
       .then((data) => {
         const totalPages = data.page.totalPages;
         this.setState({
@@ -64,13 +64,15 @@ class BookPage extends Component {
   }
 
   render() {
-    const editBook = this.props.location.query && this.props.location.query.editBook;
+    const query = this.props.location.query;
+    const editBook = query && query.editBook;
+
     return (
       <div className="books">
         <div className="books__header">
           <div className="books__title">Books — Page {Number(this.state.page) + 1} of {this.state.totalPages}</div>
           <div className="books__controls">
-            <Link to={{pathname: '/books', query: {editBook: true}}} className="books__create" activeClassName="active">
+            <Link to={{pathname: '/books', query: Object.assign({editBook: true}, query)}} className="books__create" activeClassName="active">
               Create
             </Link>
             <select onChange={this.updateSelect} value={this.state.size}>
@@ -95,7 +97,7 @@ class BookPage extends Component {
         </div>
 
         {editBook === 'true' && (
-          <Modal backUrl='/books'>
+          <Modal backUrl={this.props.location.pathname + this.props.location.search} query={query}>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
         )}

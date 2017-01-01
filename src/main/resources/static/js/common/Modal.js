@@ -6,10 +6,11 @@ function onModalClick(event) {
   event.stopPropagation();
 }
 
-function Modal({backUrl, children}) {
+function Modal({backUrl, query, children}) {
+  delete query.editBook;
   return (
     <div className="modal">
-      <Link to={{pathname: backUrl}} className="modal__link">
+      <Link to={{pathname: backUrl, query: query}} className="modal__link">
       </Link>
       <div className="modal__content">
         {children}
