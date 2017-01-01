@@ -26,7 +26,7 @@ function BooksTable({ books, page, pageSize }) {
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>
-              <Link className="btn btn-link" to={location.pathname + location.search + `&book=${i}`}>Update</Link>
+              <Link className="btn btn-link" to={{pathname: '/books', query: {editBook: true, book: book.id}}}>Update</Link>
             </td>
             <td>
               <Link className="btn btn-warning">Delete</Link>
