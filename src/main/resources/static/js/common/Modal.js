@@ -1,18 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from "react";
+import {Link} from "react-router";
 
 function onModalClick(event) {
   console.log("there");
   event.stopPropagation();
 }
 
-function Modal({ backUrl, children }) {
+function Modal({backUrl, children}) {
   return (
-    <Link to={{pathname: backUrl}} activeClassName="active" className="modal">
-      <div className="modal__content" onClick={onModalClick}>
+    <div className="modal">
+      <Link to={{pathname: backUrl}} className="modal__link">
+      </Link>
+      <div className="modal__content">
         {children}
       </div>
-    </Link>
+    </div>
   );
 }
 

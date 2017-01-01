@@ -39,8 +39,7 @@ class BookEditor extends Component {
 
   render() {
     return (
-      <div>
-      {/*<div className="book_editor" onSubmit={this.handleSubmit}>*/}
+      <form className="book_editor" onSubmit={this.handleSubmit}>
         <div className="editor__row">
           <label>
             Title
@@ -60,7 +59,7 @@ class BookEditor extends Component {
           </label>
         </div>
         <input type="Submit" value="Submit"/>
-      </div>
+      </form>
     );
   }
 }
