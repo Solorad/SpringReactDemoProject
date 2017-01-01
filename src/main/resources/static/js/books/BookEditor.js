@@ -21,8 +21,13 @@ class BookEditor extends Component {
 
   handleSubmit(event) {
     const body = this.state;
+    const csrfHeader = this.props.csrfTokenHeader;
+    const csrfToken = this.props.csrfToken;
     console.log(body);
-    axios.post("/api/books", "POST", body)
+    axios.post("/api/books", body,
+      {
+        headers: { csrfHeader : csrfToken},
+    })
   }
 
   onTitleChange(event) {

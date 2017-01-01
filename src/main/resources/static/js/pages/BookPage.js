@@ -47,7 +47,8 @@ class BookPage extends Component {
 
   loadDataFromServer() {
     axios.get("/api/books?page=" + this.state.page + "&size=" + this.state.size)
-      .then((data) => {
+      .then((response) => {
+        const data = response.data;
         const totalPages = data.page.totalPages;
         this.setState({
           totalPages,
@@ -98,7 +99,7 @@ class BookPage extends Component {
 
         {editBook === 'true' && (
           <Modal backUrl={this.props.location.pathname + this.props.location.search} query={query}>
-            <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
+            <BookEditor book={this.state.bookParam === 'new' ? null : null} />
           </Modal>
         )}
       </div>
