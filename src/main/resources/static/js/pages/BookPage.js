@@ -39,7 +39,7 @@ class BookPage extends Component {
   }
 
   onMove() {
-    this.setState({page: Number(this.props.location.query.page) || 0});
+    this.setState({page});
     this.loadDataFromServer();
   }
 
