@@ -21,6 +21,7 @@ class BookPage extends Component {
     };
 
     this.updateSelect = this.updateSelect.bind(this);
+    this.onMove = this.onMove.bind(this);
   }
 
   componentDidMount() {
@@ -37,8 +38,13 @@ class BookPage extends Component {
     // ]);
   }
 
+  onMove() {
+    this.setState({page: Number(this.props.location.query.page) || 0});
+    this.loadDataFromServer();
+  }
+
   loadDataFromServer() {
-    request("/api/books?page=" + this.props.page + "&size=" + this.state.size)
+    request("/api/books?page=" + this.state.page + "&size=" + this.state.size)
       .then((data) => {
         const totalPages = data.page.totalPages;
         this.setState({
@@ -56,13 +62,13 @@ class BookPage extends Component {
   }
 
   render() {
-    const editBook =  this.props.location.query && this.props.location.query.editBook;
+    const editBook = this.props.location.query && this.props.location.query.editBook;
     return (
       <div className="books">
         <div className="books__header">
-          <div className="books__title">Books — Page {this.props.page + 1} of {this.state.totalPages}</div>
+          <div className="books__title">Books — Page {this.state.page + 1} of {this.state.totalPages}</div>
           <div className="books__controls">
-            <Link to={{pathname: '/books', query: { editBook: true }}} className="books__create" activeClassName="active">
+            <Link to={{pathname: '/books', query: {editBook: true}}} className="books__create" activeClassName="active">
               Create
             </Link>
             <select onChange={this.updateSelect} value={this.state.size}>
@@ -74,19 +80,19 @@ class BookPage extends Component {
           </div>
         </div>
         <div className="books__table">
-          <BooksTable books={this.state.books} pageSize={this.state.size} page={this.props.page}/>
+          <BooksTable books={this.state.books} pageSize={this.state.size} page={this.state.page}/>
         </div>
         <div className="books__paginator">
           <PaginatorLink page="0" size={this.state.size} disabled={this.props.page === 0}>&lt;&lt;</PaginatorLink>
-          <PaginatorLink page={this.props.page - 1} size={this.state.size}
-                         disabled={this.props.page === 0}>&lt;</PaginatorLink>
-          <PaginatorLink page={this.props.page + 1} size={this.state.size}
-                         disabled={this.props.page === this.state.lastPage}>&gt;</PaginatorLink>
-          <PaginatorLink page={this.state.lastPage} size={this.state.size}
+          <PaginatorLink page={this.state.page - 1} size={this.state.size} onMove={this.onMove}
+                         disabled={this.state.page <= 0}>&lt;</PaginatorLink>
+          <PaginatorLink page={this.state.page + 1} size={this.state.size} onMove={this.onMove}
+                         disabled={this.state.page === this.state.lastPage}>&gt;</PaginatorLink>
+          <PaginatorLink page={this.state.lastPage} size={this.state.size} onMove={this.onMove}
                          disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
-        {editBook ==='true' && (
+        {editBook === 'true' && (
           <Modal backUrl='/books'>
             <BookEditor book={this.state.bookParam === 'new' ? null : null  }/>
           </Modal>
@@ -96,11 +102,12 @@ class BookPage extends Component {
   }
 }
 
-function PaginatorLink({page, size, disabled, children}) {
+function PaginatorLink({page, size, disabled, children, onMove}) {
   return (
     <Link
       className="books__paginatorLink"
       to={disabled ? null : `/books?page=${page}&size=${size}`}
+      onClick={disabled ? null : onMove}
     >
       {children}
     </Link>
