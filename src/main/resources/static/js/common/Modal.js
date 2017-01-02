@@ -1,16 +1,13 @@
 import React from "react";
 import {Link} from "react-router";
 
-function onModalClick(event) {
-  console.log("there");
-  event.stopPropagation();
-}
-
 function Modal({backUrl, query, children}) {
-  delete query.editBook;
+  let newQuery = Object.assign({}, query);
+  delete newQuery.editBook;
+  delete newQuery.book;
   return (
     <div className="modal">
-      <Link to={{pathname: backUrl, query: query}} className="modal__link">
+      <Link to={{pathname: backUrl, query: newQuery}} className="modal__link">
       </Link>
       <div className="modal__content">
         {children}

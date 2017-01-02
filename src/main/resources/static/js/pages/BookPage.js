@@ -67,6 +67,7 @@ class BookPage extends Component {
   render() {
     const query = this.props.location.query;
     const editBook = query && query.editBook;
+    const bookToEdit = query && query.book;
 
     return (
       <div className="books">
@@ -98,8 +99,8 @@ class BookPage extends Component {
         </div>
 
         {editBook === 'true' && (
-          <Modal backUrl={this.props.location.pathname + this.props.location.search} query={query}>
-            <BookEditor book={this.state.bookParam === 'new' ? null : null} />
+          <Modal backUrl={this.props.location.pathname} query={query}>
+            <BookEditor book={bookToEdit} />
           </Modal>
         )}
       </div>
@@ -111,7 +112,7 @@ function PaginatorLink({page, size, disabled, children}) {
   return (
     <Link
       className="books__paginatorLink"
-      to={disabled ? null : `/books?page=${page}&size=${size}`}>
+      to={disabled ? null : '/books'} query={{page, size}}>
     {children}
     </Link>
   );

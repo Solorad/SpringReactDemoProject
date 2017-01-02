@@ -31,10 +31,11 @@ body {
 }
 
 .modal__content {
-    width: 600px;
+    width: 500px;
     background: #fff;
-    min-height: 200px;
     z-index: 200;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .books__paginatorLink {
@@ -81,6 +82,25 @@ body {
     color: yellow;
     outline: none;;
     background: transparent;
+    border-radius: 5px;
+    padding: 7px 15px;
+    font-size: 18px;
+}
+
+.books_header {
+    display: flex;
+    justify-content: space-around;
+}
+
+.editor__row {
+    margin-top: 5px;
+}
+
+.submit__button {
+    border: 0;
+    color: #fff;
+    outline: none;;
+    background: #6888ad;
     border-radius: 5px;
     padding: 7px 15px;
     font-size: 18px;

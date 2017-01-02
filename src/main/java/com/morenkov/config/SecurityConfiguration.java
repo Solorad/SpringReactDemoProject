@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/built/**", "/main.css", "/api/**").permitAll()
+                .antMatchers("/built/**", "/main.css").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -42,6 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .and()
+                .csrf().disable()
                 .logout()
                 .logoutSuccessUrl("/");
     }

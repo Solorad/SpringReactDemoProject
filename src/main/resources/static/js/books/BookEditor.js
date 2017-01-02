@@ -6,7 +6,7 @@ class BookEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: props.book ? props.book.id : '',
+      id: props.book ? props.book.id : null,
       title: props.book ? props.book.title : '',
       authors: props.book ? props.book.authors : '',
       description: props.book ? props.book.description : '',
@@ -16,6 +16,20 @@ class BookEditor extends Component {
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onAuthorChange = this.onAuthorChange.bind(this);
     this.onDescriptionChange = this.onDescriptionChange.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.book != null) {
+      axios.get("/api/books/" + this.props.book)
+        .then((response) => {
+          this.setState({
+            id : response.data.id,
+            title : response.data.title,
+            authors : response.data.authors,
+            description : response.data.description,
+          })
+        })
+    }
   }
 
 
@@ -35,7 +49,7 @@ class BookEditor extends Component {
   }
 
   onAuthorChange(event) {
-    this.setState({authors : event.target.value})
+    this.setState({authors : [event.target.value]})
   }
 
   onDescriptionChange(event) {
@@ -63,7 +77,7 @@ class BookEditor extends Component {
             <textarea value={this.state.description} onChange={this.onDescriptionChange}/>
           </label>
         </div>
-        <input type="Submit" value="Submit"/>
+        <input className="submit__button" type="Submit" value="Submit"/>
       </form>
     );
   }
