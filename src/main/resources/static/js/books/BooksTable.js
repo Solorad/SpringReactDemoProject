@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import axios from "axios";
 
 function BooksTable({ books, page, pageSize }) {
   return (
@@ -29,13 +30,17 @@ function BooksTable({ books, page, pageSize }) {
               <Link className="btn btn-link" to={{pathname: '/books', query: {editBook: true, book: book.id}}}>Update</Link>
             </td>
             <td>
-              <Link className="btn btn-warning">Delete</Link>
+              <button className="btn btn-warning" onClick={() => deleteBook(book.id)}>Delete</button>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
   );
+}
+
+function deleteBook(bookId) {
+  axios.delete("/api/books/" + bookId)
 }
 
 export default BooksTable;

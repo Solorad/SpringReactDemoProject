@@ -3,6 +3,7 @@ import "babel-polyfill";
 import {Link, browserHistory} from "react-router";
 import axios from "axios";
 import Modal from "../common/Modal";
+var stompClient = require('../common/websocket-listener');
 import BooksTable from "../books/BooksTable";
 import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
@@ -31,11 +32,11 @@ class BookPage extends Component {
       return <div>404</div>;
     }
 
-    // stompClient.register([
-    //   {route: '/topic/newBook', callback: this.refreshAndGoToLastPage},
-    //   {route: '/topic/updateBook', callback: this.refreshCurrentPage},
-    //   {route: '/topic/deleteBook', callback: this.refreshCurrentPage}
-    // ]);
+    stompClient.register([
+      {route: '/topic/newBook', callback: this.loadDataFromServer.bind(this)},
+      {route: '/topic/updateBook', callback: this.loadDataFromServer.bind(this)},
+      {route: '/topic/deleteBook', callback: this.loadDataFromServer.bind(this)}
+    ]);
   }
 
   componentWillReceiveProps(nextProps) {
