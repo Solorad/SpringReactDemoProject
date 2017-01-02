@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {browserHistory} from "react-router";
 import axios from "axios";
 
 
@@ -41,7 +42,11 @@ class BookEditor extends Component {
     axios.post("/api/books", body,
       {
         headers: { csrfHeader : csrfToken},
-    })
+    });
+    browserHistory.replace('/books');
+    this.props.onCreation();
+    event.stopPropagation();
+    event.preventDefault();
   }
 
   onTitleChange(event) {
@@ -58,7 +63,7 @@ class BookEditor extends Component {
 
   render() {
     return (
-      <form className="book_editor" onSubmit={this.handleSubmit}>
+      <div className="book_editor">
         <div className="editor__row">
           <label>
             Title
@@ -77,8 +82,8 @@ class BookEditor extends Component {
             <textarea value={this.state.description} onChange={this.onDescriptionChange}/>
           </label>
         </div>
-        <input className="submit__button" type="Submit" value="Submit"/>
-      </form>
+        <input className="submit__button" type="Submit" value="Submit" onClick={this.handleSubmit}/>
+      </div>
     );
   }
 }

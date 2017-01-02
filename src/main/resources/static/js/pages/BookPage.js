@@ -23,6 +23,7 @@ class BookPage extends Component {
     };
 
     this.updateSelect = this.updateSelect.bind(this);
+    this.onBookCreation = this.onBookCreation.bind(this);
   }
 
   componentDidMount() {
@@ -63,6 +64,11 @@ class BookPage extends Component {
   updateSelect(event) {
     this.state.size = event.target.value;
     browserHistory.replace('/books?size=' + event.target.value);
+    this.loadDataFromServer();
+  }
+
+  onBookCreation() {
+    this.state.page = this.state.lastPage;
     this.loadDataFromServer();
   }
 
@@ -107,7 +113,7 @@ class BookPage extends Component {
             transitionEnterTimeout={1000}
             transitionLeaveTimeout={1000}>
             <Modal backUrl={this.props.location.pathname} query={query}>
-              <BookEditor book={bookToEdit} />
+              <BookEditor book={bookToEdit} onCreation={this.onBookCreation}/>
             </Modal>
           </ReactCSSTransitionGroup>
         )}
