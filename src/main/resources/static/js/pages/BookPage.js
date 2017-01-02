@@ -5,6 +5,7 @@ import axios from "axios";
 import Modal from "../common/Modal";
 import BooksTable from "../books/BooksTable";
 import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 
 const DEFAULT_LIMIT = 5;
@@ -99,9 +100,15 @@ class BookPage extends Component {
         </div>
 
         {editBook === 'true' && (
-          <Modal backUrl={this.props.location.pathname} query={query}>
-            <BookEditor book={bookToEdit} />
-          </Modal>
+          <ReactCSSTransitionGroup
+            component="div"
+            transitionName="modalWindow"
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}>
+            <Modal backUrl={this.props.location.pathname} query={query}>
+              <BookEditor book={bookToEdit} />
+            </Modal>
+          </ReactCSSTransitionGroup>
         )}
       </div>
     );
@@ -112,7 +119,7 @@ function PaginatorLink({page, size, disabled, children}) {
   return (
     <Link
       className="books__paginatorLink"
-      to={disabled ? null : '/books'} query={{page, size}}>
+      to={disabled ? null : {pathname : '/books', query : {page, size}}}>
     {children}
     </Link>
   );
