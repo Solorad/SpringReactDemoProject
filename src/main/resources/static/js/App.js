@@ -7,8 +7,6 @@ import Header from "./common/Header";
 
 function App({location}) {
 
-  const csrfTokenHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-  const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
   const url = location.pathname;
 
   if (url === '/') {
@@ -20,8 +18,7 @@ function App({location}) {
     <div className="app">
       <Header currentUrl={url}/>
       {(url === '/books'
-          ? <BookPage csrfTokenHeader={csrfTokenHeader}
-                      csrfToken={csrfToken} location={location}/> :
+          ? <BookPage location={location}/> :
           <Page404 />
       )}
     </div>
