@@ -24,6 +24,7 @@ class BookPage extends Component {
 
     this.updateSelect = this.updateSelect.bind(this);
     this.onBookCreation = this.onBookCreation.bind(this);
+    this.onBookDeletion = this.onBookDeletion.bind(this);
   }
 
   componentDidMount() {
@@ -72,6 +73,11 @@ class BookPage extends Component {
     this.loadDataFromServer();
   }
 
+  onBookDeletion() {
+    this.state.page = 1;
+    this.loadDataFromServer();
+  }
+
   render() {
     const query = this.props.location.query;
     const editBook = query && query.editBook;
@@ -93,7 +99,8 @@ class BookPage extends Component {
             </select>
           </div>
         </div>
-        <BooksTable books={this.state.books} pageSize={this.state.size} page={this.state.page}/>
+        <BooksTable books={this.state.books}
+                    pageSize={this.state.size} page={this.state.page} onBookDeletion={this.onBookDeletion}/>
         <div className="books__paginator">
           <PaginatorLink page="0" size={this.state.size} disabled={this.state.page === 0}>&lt;&lt;</PaginatorLink>
           <PaginatorLink page={this.state.page - 1} size={this.state.size}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import axios from "axios";
 
-function BooksTable({ books, page, pageSize }) {
+function BooksTable({ books, page, pageSize, onBookDeletion }) {
   return (
     <table className="books__table">
       <thead className="books__table__head">
@@ -28,7 +28,7 @@ function BooksTable({ books, page, pageSize }) {
               <Link className="btn btn-link" to={{pathname: '/books', query: {editBook: true, book: book.id}}}>Update</Link>
             </td>
             <td>
-              <button className="btn btn-warning" onClick={() => deleteBook(book.id)}>Delete</button>
+              <button className="btn btn-warning" onClick={() => deleteBook(book.id, onBookDeletion)}>Delete</button>
             </td>
           </tr>
         ))}
@@ -37,8 +37,9 @@ function BooksTable({ books, page, pageSize }) {
   );
 }
 
-function deleteBook(bookId) {
-  axios.delete("/api/books/" + bookId)
+function deleteBook(bookId, onBookDeletion) {
+  axios.delete("/api/books/" + bookId);
+  onBookDeletion();
 }
 
 export default BooksTable;

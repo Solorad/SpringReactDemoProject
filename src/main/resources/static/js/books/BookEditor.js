@@ -66,19 +66,19 @@ class BookEditor extends Component {
       <div className="book_editor">
         <div className="editor__row">
           <label>
-            Title
+            <span>Title</span>
             <input type="text" name="title" value={this.state.title} onChange={this.onTitleChange}/>
           </label>
         </div>
         <div className="editor__row">
           <label>
-            Authors
+            <span>Authors</span>
             <input type="text" value={this.state.authors} onChange={this.onAuthorChange}/>
           </label>
         </div>
         <div className="editor__row">
           <label>
-            Description
+            <span>Description</span>
             <textarea value={this.state.description} onChange={this.onDescriptionChange}/>
           </label>
         </div>

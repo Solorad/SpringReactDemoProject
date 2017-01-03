@@ -27,7 +27,7 @@ body {
     bottom: 0;
     background: rgba(0, 0, 0, 0.6);
     z-index: 100;
-    width:100%;
+    width: 100%;
 }
 
 .modal__content {
@@ -109,19 +109,44 @@ body {
 .books__table {
     margin-left: 50px;
     border-collapse: collapse;
-    font-family: open_sanssemibold,Helvetica,Arial,sans-serif;
+    font-family: open_sanssemibold, Helvetica, Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 1em;
+    border: 1px solid #eee;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.10),
+    0px 10px 20px rgba(0, 0, 0, 0.05),
+    0px 20px 20px rgba(0, 0, 0, 0.05),
+    0px 30px 20px rgba(0, 0, 0, 0.05);
+
 }
 
-.books__table td, th {
-    border: 1px solid #afafaf;
-    padding: 0.5rem;
-    text-align: left;
-    vertical-align: middle;
+.books__table tr:hover {
+    background: #f4f4f4;
+}
+
+.books__table td {
+    color: #999;
+    border: 1px solid #eee;
+    padding: 12px 35px;
+}
+
+.books__table th {
+    background: #00cccc;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding: 12px 35px;
 }
 
 .books__table__head {
     background: #cecece;
+}
+
+.book_editor label > span{
+    width: 100px;
+    font-weight: bold;
+    float: left;
+    padding-top: 8px;
+    padding-right: 5px;
 }
