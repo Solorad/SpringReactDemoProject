@@ -93,9 +93,7 @@ class BookPage extends Component {
             </select>
           </div>
         </div>
-        <div className="books__table">
-          <BooksTable books={this.state.books} pageSize={this.state.size} page={this.state.page}/>
-        </div>
+        <BooksTable books={this.state.books} pageSize={this.state.size} page={this.state.page}/>
         <div className="books__paginator">
           <PaginatorLink page="0" size={this.state.size} disabled={this.state.page === 0}>&lt;&lt;</PaginatorLink>
           <PaginatorLink page={this.state.page - 1} size={this.state.size}

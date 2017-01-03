@@ -105,3 +105,23 @@ body {
     padding: 7px 15px;
     font-size: 18px;
 }
+
+.books__table {
+    margin-left: 50px;
+    border-collapse: collapse;
+    font-family: open_sanssemibold,Helvetica,Arial,sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1em;
+}
+
+.books__table td, th {
+    border: 1px solid #afafaf;
+    padding: 0.5rem;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.books__table__head {
+    background: #cecece;
+}
