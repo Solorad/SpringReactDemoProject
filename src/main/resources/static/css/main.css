@@ -85,12 +85,20 @@ body {
     border-radius: 5px;
     padding: 7px 15px;
     font-size: 18px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.header__logoutButton:hover {
+    background-color: yellow;
+    color: #373a3c;
+    border: none;
 }
 
 .books__header {
-    margin-top: 5px;
+    margin: 15px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     font-family: open_sanssemibold, Helvetica, Arial, sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -172,4 +180,34 @@ body {
 
 .books__table th:first-child {
     width:20px;
+}
+
+.books__create{
+    margin-right:10px;
+}
+
+.books__header__select {
+    width: 120px;
+    height: 25px;
+    padding: 1px;
+    border-radius: 4px;
+}
+
+.selectable-icon {
+    width: 24px;
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    -webkit-transition: .2s ease-in-out;
+    transition: .2s ease-in-out;
+    margin-left: 5px;
+}
+
+.selectable-icon:hover {
+    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
+}
+
+.books__table__control {
+    text-align: end;
+    width: 60px;
 }

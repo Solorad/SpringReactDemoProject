@@ -13,7 +13,6 @@ function BooksTable({ books, page, pageSize, onBookDeletion }) {
           <th>Description</th>
           <th>Published</th>
           <th>&nbsp;</th>
-          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -24,11 +23,11 @@ function BooksTable({ books, page, pageSize, onBookDeletion }) {
             <td>{book.authors}</td>
             <td>{book.description}</td>
             <td>{book.publishDate}</td>
-            <td>
-              <Link className="btn btn-link" to={{pathname: '/books', query: {editBook: true, book: book.id}}}>Update</Link>
-            </td>
-            <td>
-              <button className="btn btn-warning" onClick={() => deleteBook(book.id, onBookDeletion)}>Delete</button>
+            <td className="books__table__control">
+              <Link to={{pathname: '/books', query: {editBook: true, book: book.id}}}>
+                <img className="selectable-icon" src="/images/edit-icon.png"/>
+              </Link>
+              <img className="selectable-icon" src="/images/delete.png" onClick={() => deleteBook(book.id, onBookDeletion)} />
             </td>
           </tr>
         ))}

@@ -91,7 +91,7 @@ class BookPage extends Component {
             <Link to={{pathname: '/books', query: Object.assign({editBook: true}, query)}} className="books__create" activeClassName="active">
               Create
             </Link>
-            <select onChange={this.updateSelect} value={this.state.size}>
+            <select className="books__header__select" onChange={this.updateSelect} value={this.state.size}>
               <option value="2">2</option>
               <option value="5">5</option>
               <option value="7">7</option>
