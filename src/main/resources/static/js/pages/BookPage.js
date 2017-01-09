@@ -3,8 +3,10 @@ import "babel-polyfill";
 import {Link, browserHistory} from "react-router";
 import axios from "axios";
 import Modal from "../common/Modal";
+var stompClient = require('../common/websocket-listener');
 import BooksTable from "../books/BooksTable";
 import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 
 const DEFAULT_LIMIT = 5;
@@ -21,6 +23,8 @@ class BookPage extends Component {
     };
 
     this.updateSelect = this.updateSelect.bind(this);
+    this.onBookCreation = this.onBookCreation.bind(this);
+    this.onBookDeletion = this.onBookDeletion.bind(this);
   }
 
   componentDidMount() {
@@ -30,11 +34,11 @@ class BookPage extends Component {
       return <div>404</div>;
     }
 
-    // stompClient.register([
-    //   {route: '/topic/newBook', callback: this.refreshAndGoToLastPage},
-    //   {route: '/topic/updateBook', callback: this.refreshCurrentPage},
-    //   {route: '/topic/deleteBook', callback: this.refreshCurrentPage}
-    // ]);
+    stompClient.register([
+      {route: '/topic/newBook', callback: this.loadDataFromServer.bind(this)},
+      {route: '/topic/updateBook', callback: this.loadDataFromServer.bind(this)},
+      {route: '/topic/deleteBook', callback: this.loadDataFromServer.bind(this)}
+    ]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,6 +68,16 @@ class BookPage extends Component {
     this.loadDataFromServer();
   }
 
+  onBookCreation() {
+    this.state.page = this.state.lastPage;
+    this.loadDataFromServer();
+  }
+
+  onBookDeletion() {
+    this.state.page = 1;
+    this.loadDataFromServer();
+  }
+
   render() {
     const query = this.props.location.query;
     const editBook = query && query.editBook;
@@ -77,7 +91,7 @@ class BookPage extends Component {
             <Link to={{pathname: '/books', query: Object.assign({editBook: true}, query)}} className="books__create" activeClassName="active">
               Create
             </Link>
-            <select onChange={this.updateSelect} value={this.state.size}>
+            <select className="books__header__select" onChange={this.updateSelect} value={this.state.size}>
               <option value="2">2</option>
               <option value="5">5</option>
               <option value="7">7</option>
@@ -85,9 +99,8 @@ class BookPage extends Component {
             </select>
           </div>
         </div>
-        <div className="books__table">
-          <BooksTable books={this.state.books} pageSize={this.state.size} page={this.state.page}/>
-        </div>
+        <BooksTable books={this.state.books}
+                      pageSize={this.state.size} page={this.state.page} onBookDeletion={this.onBookDeletion}/>
         <div className="books__paginator">
           <PaginatorLink page="0" size={this.state.size} disabled={this.state.page === 0}>&lt;&lt;</PaginatorLink>
           <PaginatorLink page={this.state.page - 1} size={this.state.size}
@@ -99,9 +112,15 @@ class BookPage extends Component {
         </div>
 
         {editBook === 'true' && (
-          <Modal backUrl={this.props.location.pathname} query={query}>
-            <BookEditor book={bookToEdit} />
-          </Modal>
+          <ReactCSSTransitionGroup
+            component="div"
+            transitionName="modalWindow"
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}>
+            <Modal backUrl={this.props.location.pathname} query={query}>
+              <BookEditor book={bookToEdit} onCreation={this.onBookCreation}/>
+            </Modal>
+          </ReactCSSTransitionGroup>
         )}
       </div>
     );
@@ -112,7 +131,7 @@ function PaginatorLink({page, size, disabled, children}) {
   return (
     <Link
       className="books__paginatorLink"
-      to={disabled ? null : '/books'} query={{page, size}}>
+      to={disabled ? null : {pathname : '/books', query : {page, size}}}>
     {children}
     </Link>
   );
