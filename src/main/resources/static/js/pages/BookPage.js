@@ -1,193 +1,140 @@
-'use strict';
-
-import React from "react";
+import React, {Component} from "react";
 import "babel-polyfill";
-import when from "when";
-import client from "../common/client";
-import stompClient from "../common/websocket-listener";
-import follow from "../common/follow";
-import BookList from "../books/BookList";
-import NavLinks from "../books/NavLinks";
-import BookModalDialog from "../books/BookModalDialog";
-import SelectItems from "../books/SelectItems"; // function to hop multiple links by "rel"
+import {Link, browserHistory} from "react-router";
+import axios from "axios";
+import Modal from "../common/Modal";
+var stompClient = require('../common/websocket-listener');
+import BooksTable from "../books/BooksTable";
+import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
-const root = '/api';
 
-class BookPage extends React.Component {
+const DEFAULT_LIMIT = 5;
 
+class BookPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: [], attributes: [],
-      page: 1, pageSize: 2, links: {},
+      books: [],
+      page: Number(props.location.query.page) || 0,
+      totalPages: 1,
+      lastPage: 1,
+      size: Number(props.location.query.size) || DEFAULT_LIMIT,
     };
-    this.updatePageSize = this.updatePageSize.bind(this);
-    this.onNavigate = this.onNavigate.bind(this);
-    this.refreshCurrentPage = this.refreshCurrentPage.bind(this);
-    this.refreshAndGoToLastPage = this.refreshAndGoToLastPage.bind(this);
-  }
 
-  loadFromServer(pageSize) {
-    follow(client, root, [
-      {rel: 'books', params: {size: pageSize}}]
-    ).then(bookCollection => {
-      return client({
-        method: 'GET',
-        path: bookCollection.entity._links.profile.href,
-        headers: {'Accept': 'application/schema+json'}
-      }).then(schema => {
-        /**
-         * Filter unneeded JSON Schema properties, like uri references and
-         * subtypes ($ref).
-         */
-        Object.keys(schema.entity.properties).forEach(function (property) {
-          if (schema.entity.properties[property].hasOwnProperty('format') &&
-            schema.entity.properties[property].format === 'uri') {
-            delete schema.entity.properties[property];
-          }
-          if (schema.entity.properties[property].hasOwnProperty('$ref')) {
-            delete schema.entity.properties[property];
-          }
-        });
-
-        this.schema = schema.entity;
-        this.links = bookCollection.entity._links;
-        return bookCollection;
-      });
-    }).then(bookCollection => {
-      this.page = bookCollection.entity.page;
-      return bookCollection.entity._embedded.books.map(books =>
-        client({
-          method: 'GET',
-          path: books._links.self.href
-        })
-      );
-    }).then(bookPromises => {
-      return when.all(bookPromises);
-    }).done(books => {
-      this.setState({
-        page: this.page,
-        books: books,
-        attributes: Object.keys(this.schema.properties),
-        pageSize: pageSize,
-        links: this.links
-      });
-    });
-  }
-
-  showUpdateWindow(book) {
-
-  }
-
-  onNavigate(navUri) {
-    client({
-      method: 'GET',
-      path: navUri
-    }).then(bookCollection => {
-      this.links = bookCollection.entity._links;
-      this.page = bookCollection.entity.page;
-
-      return bookCollection.entity._embedded.books.map(books =>
-        client({
-          method: 'GET',
-          path: books._links.self.href
-        })
-      );
-    }).then(bookPromises => {
-      return when.all(bookPromises);
-    }).done(books => {
-      this.setState({
-        page: this.page,
-        books: books,
-        attributes: Object.keys(this.schema.properties),
-        pageSize: this.state.pageSize,
-        links: this.links
-      });
-    });
-  }
-
-  updatePageSize(pageSize) {
-    if (pageSize !== this.state.pageSize) {
-      this.loadFromServer(pageSize);
-    }
-  }
-
-  refreshAndGoToLastPage() {
-    follow(client, root, [{
-      rel: 'books',
-      params: {size: this.state.pageSize}
-    }]).done(response => {
-      if (response.entity._links.last !== undefined) {
-        this.onNavigate(response.entity._links.last.href);
-      } else {
-        this.onNavigate(response.entity._links.self.href);
-      }
-    })
-  }
-
-  refreshCurrentPage() {
-    follow(client, root, [{
-      rel: 'books',
-      params: {
-        size: this.state.pageSize,
-        page: this.state.page.number
-      }
-    }]).then(bookCollection => {
-      this.links = bookCollection.entity._links;
-      this.page = bookCollection.entity.page;
-
-      return bookCollection.entity._embedded.books.map(books => {
-        return client({
-          method: 'GET',
-          path: books._links.self.href
-        })
-      });
-    }).then(bookPromises => {
-      return when.all(bookPromises);
-    }).then(books => {
-      this.setState({
-        page: this.page,
-        books: books,
-        attributes: Object.keys(this.schema.properties),
-        pageSize: this.state.pageSize,
-        links: this.links
-      });
-    });
+    this.updateSelect = this.updateSelect.bind(this);
+    this.onBookCreation = this.onBookCreation.bind(this);
+    this.onBookDeletion = this.onBookDeletion.bind(this);
   }
 
   componentDidMount() {
-    this.loadFromServer(this.state.pageSize);
+    this.loadDataFromServer();
+
+    if (this.props.page < 0 || this.props.page > this.state.lastPage || this.state.size < 1) {
+      return <div>404</div>;
+    }
+
     stompClient.register([
-      {route: '/topic/newBook', callback: this.refreshAndGoToLastPage},
-      {route: '/topic/updateBook', callback: this.refreshCurrentPage},
-      {route: '/topic/deleteBook', callback: this.refreshCurrentPage}
+      {route: '/topic/newBook', callback: this.loadDataFromServer.bind(this)},
+      {route: '/topic/updateBook', callback: this.loadDataFromServer.bind(this)},
+      {route: '/topic/deleteBook', callback: this.loadDataFromServer.bind(this)}
     ]);
   }
 
+  componentWillReceiveProps(nextProps) {
+    var page = nextProps.location.query.page;
+    if (page && page !== this.state.page) {
+      this.state.page = Number(nextProps.location.query.page);
+      this.loadDataFromServer();
+    }
+  }
+
+  loadDataFromServer() {
+    axios.get("/api/books?page=" + this.state.page + "&size=" + this.state.size)
+      .then((response) => {
+        const data = response.data;
+        const totalPages = data.page.totalPages;
+        this.setState({
+          totalPages,
+          lastPage: totalPages - 1,
+          books: data._embedded.books,
+        });
+      });
+  }
+
+  updateSelect(event) {
+    this.state.size = event.target.value;
+    browserHistory.replace('/books?size=' + event.target.value);
+    this.loadDataFromServer();
+  }
+
+  onBookCreation() {
+    this.state.page = this.state.lastPage;
+    this.loadDataFromServer();
+  }
+
+  onBookDeletion() {
+    this.state.page = 1;
+    this.loadDataFromServer();
+  }
+
   render() {
-    var pageInfo = this.state.page.hasOwnProperty("number") ?
-      <h3 className="col-xs-4">Books - Page {this.state.page.number + 1} of {this.state.page.totalPages}</h3> : null;
+    const query = this.props.location.query;
+    const editBook = query && query.editBook;
+    const bookToEdit = query && query.book;
+
     return (
-      <div>
-        <div className="row">
-          {pageInfo}
-          <div className="float-xs-right">
-            <a href="#modalBook">Create</a>
-            <SelectItems pageSize={this.props.pageSize}
-                         updatePageSize={this.updatePageSize}/>
+      <div className="books">
+        <div className="books__header">
+          <div className="books__title">Books — Page {Number(this.state.page) + 1} of {this.state.totalPages}</div>
+          <div className="books__controls">
+            <Link to={{pathname: '/books', query: Object.assign({editBook: true}, query)}} className="books__create" activeClassName="active">
+              Create
+            </Link>
+            <select className="books__header__select" onChange={this.updateSelect} value={this.state.size}>
+              <option value="2">2</option>
+              <option value="5">5</option>
+              <option value="7">7</option>
+              <option value="10">10</option>
+            </select>
           </div>
         </div>
-        <BookList books={this.state.books}
-                  page={this.state.page}
-                  attributes={this.state.attributes}
-                  showUpdateWindow={this.showUpdateWindow}
-                  updatePageSize={this.updatePageSize}/>
-        <NavLinks links={this.state.links}
-                  onNavigate={this.onNavigate}/>
-        <BookModalDialog/>
+        <BooksTable books={this.state.books}
+                      pageSize={this.state.size} page={this.state.page} onBookDeletion={this.onBookDeletion}/>
+        <div className="books__paginator">
+          <PaginatorLink page="0" size={this.state.size} disabled={this.state.page === 0}>&lt;&lt;</PaginatorLink>
+          <PaginatorLink page={this.state.page - 1} size={this.state.size}
+                         disabled={this.state.page <= 0}>&lt;</PaginatorLink>
+          <PaginatorLink page={this.state.page + 1} size={this.state.size}
+                         disabled={this.state.page === this.state.lastPage}>&gt;</PaginatorLink>
+          <PaginatorLink page={this.state.lastPage} size={this.state.size}
+                         disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
+        </div>
+
+        {editBook === 'true' && (
+          <ReactCSSTransitionGroup
+            component="div"
+            transitionName="modalWindow"
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}>
+            <Modal backUrl={this.props.location.pathname} query={query}>
+              <BookEditor book={bookToEdit} onCreation={this.onBookCreation}/>
+            </Modal>
+          </ReactCSSTransitionGroup>
+        )}
       </div>
-    )
+    );
   }
+}
+
+function PaginatorLink({page, size, disabled, children}) {
+  return (
+    <Link
+      className="books__paginatorLink"
+      to={disabled ? null : {pathname : '/books', query : {page, size}}}>
+    {children}
+    </Link>
+  );
 }
 
 export default BookPage;

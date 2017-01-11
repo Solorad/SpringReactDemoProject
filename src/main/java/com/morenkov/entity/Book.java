@@ -1,8 +1,10 @@
 package com.morenkov.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.util.Set;
@@ -12,6 +14,8 @@ import java.util.Set;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
     @Id
     private String id;

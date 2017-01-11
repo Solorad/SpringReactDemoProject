@@ -1,3 +1,27 @@
 {
   "extends": "airbnb",
+  "rules": {
+    "linebreak-style" : 0,
+    "array-bracket-spacing": 0,
+    "camelcase": 0,
+    "func-names": 0,
+    "global-require": 0,
+    "import/extensions": 1,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-mutable-exports": 0,
+    "import/no-unresolved": 0,
+    "jsx-a11y/img-has-alt": 0,
+    "max-len": [ "error", 120 ],
+    "new-cap": 0,
+    "no-param-reassign": [ 1, { "props": false } ],
+    "no-return-assign": 0,
+    "no-underscore-dangle": 0,
+    "no-use-before-define": 0,
+    "prefer-arrow-callback": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-pascal-case": 0,
+    "react/prop-types": 0,
+    "react/require-extension": 0,
+    "space-before-function-paren": 0
+  }
 }
