@@ -31,19 +31,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/built/**", "/main.css", "/login**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login/authenticate")
-                    .failureUrl("/login?error=bad_credentials")
-                    .defaultSuccessUrl("/", true)
-                    .permitAll()
-                .and()
-                    .logout()
-                    .logoutSuccessUrl("/");
+            .authorizeRequests()
+            .antMatchers("/built/**", "/main.css", "/login**").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login/authenticate")
+                .failureUrl("/login?error=bad_credentials")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+            .and()
+                .logout()
+                .logoutSuccessUrl("/");
     }
 
 }
