@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
+import axios from "axios";
 
 function Header({ currentUrl }) {
   return (
@@ -9,11 +10,14 @@ function Header({ currentUrl }) {
         <HeaderLink url="/books" active={currentUrl === '/books'}>Books</HeaderLink>
         <HeaderLink url="/lib" active={currentUrl === '/lib'}>Lib</HeaderLink>
       </div>
-      <form className="header__logoutForm" action="/logout" method="post">
-        <button className="header__logoutButton" type="submit">Logout</button>
-      </form>
+      <button className="header__logoutButton" onClick={logout}>Logout</button>
     </div>
   );
+}
+
+function logout() {
+  axios.post("/logout")
+    .then(() => {window.location.replace("/")});
 }
 
 function HeaderLink({ url, active, children }) {
