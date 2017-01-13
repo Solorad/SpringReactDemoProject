@@ -14,13 +14,11 @@ const DEFAULT_LIMIT = 5;
 class BookPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      books: [],
-      page: Number(props.location.query.page) || 0,
-      totalPages: 1,
-      lastPage: 1,
-      size: Number(props.location.query.size) || DEFAULT_LIMIT,
-    };
+    this.books = [];
+    this.page = Number(props.location.query.page) || 0;
+    this.totalPages = 1;
+    this.lastPage = 1;
+    this.size = Number(props.location.query.size) || DEFAULT_LIMIT;
 
     this.updateSelect = this.updateSelect.bind(this);
     this.onBookCreation = this.onBookCreation.bind(this);
@@ -30,7 +28,7 @@ class BookPage extends Component {
   componentDidMount() {
     this.loadDataFromServer();
 
-    if (this.props.page < 0 || this.props.page > this.state.lastPage || this.state.size < 1) {
+    if (this.props.page < 0 || this.props.page > this.lastPage || this.size < 1) {
       return <div>404</div>;
     }
 
@@ -43,38 +41,36 @@ class BookPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     var page = nextProps.location.query.page;
-    if (page && page !== this.state.page) {
-      this.state.page = Number(nextProps.location.query.page);
+    if (page && page !== this.page) {
+      this.page = Number(nextProps.location.query.page);
       this.loadDataFromServer();
     }
   }
 
   loadDataFromServer() {
-    axios.get("/api/books?page=" + this.state.page + "&size=" + this.state.size)
+    axios.get("/api/books?page=" + this.page + "&size=" + this.size)
       .then((response) => {
         const data = response.data;
-        const totalPages = data.page.totalPages;
-        this.setState({
-          totalPages,
-          lastPage: totalPages - 1,
-          books: data._embedded.books,
-        });
+        this.totalPages = Math.max(data.page.totalPages, 1);
+        this.lastPage = this.totalPages;
+        this.books = data._embedded.books;
+        this.forceUpdate();
       });
   }
 
   updateSelect(event) {
-    this.state.size = event.target.value;
+    this.size = event.target.value;
     browserHistory.replace('/books?size=' + event.target.value);
     this.loadDataFromServer();
   }
 
   onBookCreation() {
-    this.state.page = this.state.lastPage;
+    this.page = this.lastPage;
     this.loadDataFromServer();
   }
 
   onBookDeletion() {
-    this.state.page = 1;
+    this.page = 0;
     this.loadDataFromServer();
   }
 
@@ -86,12 +82,12 @@ class BookPage extends Component {
     return (
       <div className="books">
         <div className="books__header">
-          <div className="books__title">Books — Page {Number(this.state.page) + 1} of {this.state.totalPages}</div>
+          <div className="books__title">Books — Page {Number(this.page) + 1} of {this.totalPages}</div>
           <div className="books__controls">
             <Link to={{pathname: '/books', query: Object.assign({editBook: true}, query)}} className="books__create" activeClassName="active">
               Create
             </Link>
-            <select className="books__header__select" onChange={this.updateSelect} value={this.state.size}>
+            <select className="books__header__select" onChange={this.updateSelect} value={this.size}>
               <option value="2">2</option>
               <option value="5">5</option>
               <option value="7">7</option>
@@ -99,16 +95,16 @@ class BookPage extends Component {
             </select>
           </div>
         </div>
-        <BooksTable books={this.state.books}
-                      pageSize={this.state.size} page={this.state.page} onBookDeletion={this.onBookDeletion}/>
+        <BooksTable books={this.books}
+                      pageSize={this.size} page={this.page} onBookDeletion={this.onBookDeletion}/>
         <div className="books__paginator">
-          <PaginatorLink page="0" size={this.state.size} disabled={this.state.page === 0}>&lt;&lt;</PaginatorLink>
-          <PaginatorLink page={this.state.page - 1} size={this.state.size}
-                         disabled={this.state.page <= 0}>&lt;</PaginatorLink>
-          <PaginatorLink page={this.state.page + 1} size={this.state.size}
-                         disabled={this.state.page === this.state.lastPage}>&gt;</PaginatorLink>
-          <PaginatorLink page={this.state.lastPage} size={this.state.size}
-                         disabled={this.state.page === this.state.lastPage}>&gt;&gt;</PaginatorLink>
+          <PaginatorLink page="0" size={this.size} disabled={this.page === 0}>&lt;&lt;</PaginatorLink>
+          <PaginatorLink page={this.page - 1} size={this.size}
+                         disabled={this.page <= 0}>&lt;</PaginatorLink>
+          <PaginatorLink page={this.page + 1} size={this.size}
+                         disabled={this.page === this.lastPage}>&gt;</PaginatorLink>
+          <PaginatorLink page={this.lastPage} size={this.size}
+                         disabled={this.page === this.lastPage}>&gt;&gt;</PaginatorLink>
         </div>
 
         {editBook === 'true' && (
