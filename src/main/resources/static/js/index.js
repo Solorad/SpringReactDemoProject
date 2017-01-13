@@ -4,8 +4,12 @@ import { Router, Route, browserHistory } from 'react-router';
 import App from './App';
 import axios from "axios";
 
-const csrfTokenHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfTokenHeader = document.querySelector('meta[name="_csrf_header"]')
+  ? document.querySelector('meta[name="_csrf_header"]').getAttribute('content')
+  : null;
+const csrfToken = document.querySelector('meta[name="_csrf"]') ?
+  document.querySelector('meta[name="_csrf"]').getAttribute('content')
+  : null;
 
 axios.defaults.xsrfHeaderName = csrfTokenHeader;
 axios.defaults.headers.common[csrfTokenHeader] = csrfToken;
