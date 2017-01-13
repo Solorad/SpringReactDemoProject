@@ -28,7 +28,7 @@ class BookPage extends Component {
   componentDidMount() {
     this.loadDataFromServer();
 
-    if (this.props.page < 0 || this.props.page > this.lastPage || this.size < 1) {
+    if (this.props.page < 1 || this.props.page > this.lastPage || this.size < 1) {
       return <div>404</div>;
     }
 
@@ -65,7 +65,7 @@ class BookPage extends Component {
   }
 
   onBookCreation() {
-    this.page = this.lastPage;
+    this.page = this.lastPage - 1;
     this.loadDataFromServer();
   }
 
@@ -102,9 +102,9 @@ class BookPage extends Component {
           <PaginatorLink page={this.page - 1} size={this.size}
                          disabled={this.page <= 0}>&lt;</PaginatorLink>
           <PaginatorLink page={this.page + 1} size={this.size}
-                         disabled={this.page === this.lastPage}>&gt;</PaginatorLink>
-          <PaginatorLink page={this.lastPage} size={this.size}
-                         disabled={this.page === this.lastPage}>&gt;&gt;</PaginatorLink>
+                         disabled={this.page >= (Number(this.lastPage) - 1)}>&gt;</PaginatorLink>
+          <PaginatorLink page={this.lastPage - 1} size={this.size}
+                         disabled={this.page >= (Number(this.lastPage) - 1)}>&gt;&gt;</PaginatorLink>
         </div>
 
         {editBook === 'true' && (
