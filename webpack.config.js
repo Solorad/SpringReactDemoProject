@@ -8,7 +8,8 @@ const node_dir = __dirname + '/node_modules';
 
 const plugins = [
   new webpack.NamedModulesPlugin(),
-  new webpack.optimize.CommonsChunkPlugin({ name: "c", filename: "c.js" })
+  new webpack.optimize.CommonsChunkPlugin({ name: "c", filename: "c.js" }),
+  new webpack.HotModuleReplacementPlugin()
 ];
 
 if (isProd) {
