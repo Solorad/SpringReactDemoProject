@@ -3,7 +3,7 @@
     <title>Login</title>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <meta name="_csrf" th:content="${_csrf.token}"/>
-    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
 </head>
 <body>
 <div class="header">
@@ -11,7 +11,7 @@
         <a href="/" class="header__logo">Book store</a>
     </div>
 </div>
-<div class="">
+<div class="login-form">
     <form name="f" th:action="@{/login}" method="post">
         <div th:if="${param.error}" class="alert alert-error">
             Invalid username and password.
@@ -26,7 +26,6 @@
         <div class="form-actions">
             <button type="submit" class="btn">Log in</button>
         </div>
-        </fieldset>
     </form>
 </div>
 

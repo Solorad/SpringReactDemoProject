@@ -15,7 +15,7 @@ module.exports = {
         filename: './src/main/resources/static/built/bundle.js'
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: path.join(__dirname, '.'),
                 exclude: /(node_modules)/,
@@ -25,7 +25,19 @@ module.exports = {
                     presets: ['es2015', 'react']
                 }
             },
-            { test: /\.png$/, loader: 'file' }
+            {
+                test: /\.png$/,
+                loader: 'file'
+            },
+            {
+              test: /\.less$/,
+              use: [
+                'style-loader',
+                { loader: 'css-loader', options: { importLoaders: 1 } },
+                'less-loader'
+              ]
+            }
+
         ]
     }
 };
