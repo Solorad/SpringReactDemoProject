@@ -6,7 +6,7 @@ import Modal from "../common/Modal";
 var stompClient = require('../common/websocket-listener');
 import BooksTable from "../books/BooksTable";
 import BookEditor from "../books/BookEditor"; // function to hop multiple links by "rel"
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 
 const DEFAULT_LIMIT = 5;

@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 import App from './App';
 
-import css from '../css/main.less';
-
+import css from '../css/books.less';
 
 // We require the routes and render to the DOM using ReactDOM API
 ReactDOM.render(
