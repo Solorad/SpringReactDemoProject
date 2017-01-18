@@ -1,70 +1,86 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
 }
 
 .login-form {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header {
-  background: #373a3c;
-  height: 54px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
+    background: #373a3c;
+    height: 54px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .header__logo {
-  font-size: 28px;
-  color: #fff;
-  text-decoration: none;
+    font-size: 28px;
+    color: #fff;
+    text-decoration: none;
 }
 
 .header__link {
-  font-size: 20px;
-  color: #fff;
-  text-decoration: none;
-  margin-left: 25px;
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+    margin-left: 25px;
 }
 
 .header__link_active {
-  color: yellow;
+    color: yellow;
 }
 
 .header__logoutButton {
-  border: 1px solid yellow;
-  color: yellow;
-  outline: none;;
-  background: transparent;
-  border-radius: 5px;
-  padding: 7px 15px;
-  font-size: 18px;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
+    border: 1px solid yellow;
+    color: yellow;
+    outline: none;;
+    background: transparent;
+    border-radius: 5px;
+    padding: 7px 15px;
+    font-size: 18px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }
 
 .header__logoutButton:hover {
-  background-color: yellow;
-  color: #373a3c;
-  border: none;
+    background-color: yellow;
+    color: #373a3c;
+    border: none;
 }
 
 .books__header {
-  margin: 15px;
-  display: flex;
-  justify-content: space-between;
-  font-family: open_sanssemibold, Helvetica, Arial, sans-serif;
-  font-style: normal;
-  font-weight: 400;
+    margin: 15px;
+    display: flex;
+    justify-content: space-between;
+    font-family: open_sanssemibold, Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.login__button {
+    border: 1px solid #0f93dc;
+    outline: none;;
+    background: #48cad2;
+    border-radius: 5px;
+    padding: 7px 15px;
+    font-size: 18px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.login-form__actions {
+    display: flex;
+    justify-content: center;
 }
