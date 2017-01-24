@@ -1,56 +1,59 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <link rel="stylesheet" href="css/common.css"/>
+  <title>Login</title>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <link rel="stylesheet" href="css/common.css"/>
 </head>
 <body>
 <div class="header">
-    <div class="header__left">
-        <a href="/" class="header__logo">Book store</a>
-    </div>
+  <div class="header__left">
+    <a href="/" class="header__logo">Book store</a>
+  </div>
 </div>
-<div class="login-form">
-    <form name="f" th:action="@{/login}" method="post">
-        <div th:if="${param.error}" class="alert alert-error">
-            Invalid username and password.
-        </div>
-        <div th:if="${param.logout}" class="alert alert-success">
-            You have been logged out.
-        </div>
-        <div>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username"/>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password"/>
-        </div>
-        <div class="login-form__actions">
-            <button type="submit" class="login__button">Log in</button>
-        </div>
-    </form>
-
-<!--Spring social showcase boot-->
+<div class="signin-form">
+  <!--Spring social showcase boot-->
+  <div class="with-oauth2">
+    <b>Sign in with</b>
     <!-- TWITTER SIGNIN -->
-    <form id="tw_signin" th:action="@{/signin/twitter}" method="POST">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-        <button type="submit"><img th:src="@{/images/logo/twitter.png}"></img></button>
-    </form>
+    <div class="social-sign-in">
+      <form id="tw_signin" th:action="@{/signin/twitter}" method="POST">
+        <button type="submit"><img th:src="@{/images/logo/twitter.png}" class="login-image"/></button>
+      </form>
+    </div>
 
     <!-- FACEBOOK SIGNIN -->
-    <form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-        <input type="hidden" name="scope" value="read_stream,user_posts,user_photos"></input>
-        <button type="submit"><img th:src="@{/social/facebook/sign-in-with-facebook.png}"></img></button>
-    </form>
+    <div class="social-sign-in">
+      <form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
+        <input type="hidden" name="scope" value="read_stream,user_posts,user_photos"/>
+        <button type="submit"><img th:src="@{/images/logo/f_logo.jpg}" class="login-image"/></button>
+      </form>
+    </div>
+  </div>
 
-    <!-- LINKEDIN SIGNIN -->
-    <form name="li_signin" id="li_signin" th:action="@{/signin/linkedin}" method="POST">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-        <button type="submit">Sign In with LinkedIn</button>
-    </form>
+
+  <b>OR</b>
+
+  <form name="f" th:action="@{/login}" method="post">
+    <div th:if="${param.error}" class="alert alert-error">
+      Invalid username and password.
+    </div>
+    <div th:if="${param.logout}" class="alert alert-success">
+      You have been logged out.
+    </div>
+    <div class="login-row">
+      <label for="username" class="login-row__labael">Username</label>
+      <input type="text" id="username" name="username"/>
+    </div>
+    <div class="login-row">
+      <label for="password" class="login-row__labael">Password</label>
+      <input type="password" id="password" name="password"/>
+    </div>
+    <div class="login-form__actions">
+      <button type="submit" class="login__button">Sign in</button>
+    </div>
+  </form>
+
 </div>
 
 

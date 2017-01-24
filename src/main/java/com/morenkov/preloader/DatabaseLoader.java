@@ -1,9 +1,9 @@
 package com.morenkov.preloader;
 
+import com.morenkov.entity.Account;
 import com.morenkov.entity.Book;
-import com.morenkov.entity.Employee;
 import com.morenkov.repository.BookRepository;
-import com.morenkov.repository.EmployeeRepository;
+import com.morenkov.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,19 +20,19 @@ import java.util.Set;
 @Component
 public class DatabaseLoader implements CommandLineRunner {
 
-    private final EmployeeRepository employeeRepository;
+    private final AccountRepository accountRepository;
     private final BookRepository bookRepository;
 
     @Autowired
-    public DatabaseLoader(EmployeeRepository employeeRepository, BookRepository bookRepository) {
-        this.employeeRepository = employeeRepository;
+    public DatabaseLoader(AccountRepository accountRepository, BookRepository bookRepository) {
+        this.accountRepository = accountRepository;
         this.bookRepository = bookRepository;
     }
 
     @Override
     public void run(String... strings) throws Exception {
-//        addUsers();
-//        addBooks();
+        addUsers();
+        addBooks();
     }
 
     private void addBooks() {
@@ -68,18 +68,8 @@ public class DatabaseLoader implements CommandLineRunner {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("admin", "doesn't matter",
                         AuthorityUtils.createAuthorityList("ROLE_ADMIN")));
-        Employee greg = employeeRepository.save(new Employee("Greg", "Malkovich", adminRoles, null, "123456"));
-        Employee admin = employeeRepository.save(new Employee("admin", "The boss", adminRoles, null, "admin"));
-
-
-        Set<String> userRoles = new HashSet<>();
-        adminRoles.add("ROLE_USER");
-        this.employeeRepository.save(new Employee("Anatoly", "Vasserman", userRoles, greg.getId(), "12"));
-        this.employeeRepository.save(new Employee("Jaene", "Proudmoure", userRoles, greg.getId(), "12"));
-        this.employeeRepository.save(new Employee("Kell", "Talas", userRoles, greg.getId(), "12"));
-
-        this.employeeRepository.save(new Employee("Silvana", "Banshee", userRoles, admin.getId(), "12"));
-
+        Account greg = accountRepository.save(new Account("Greg", "Greg", "Malkovich", adminRoles, "123456"));
+        Account admin = accountRepository.save(new Account("admin", "admin", "The boss", adminRoles, "admin"));
         SecurityContextHolder.clearContext();
     }
 }

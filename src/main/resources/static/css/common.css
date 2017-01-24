@@ -4,17 +4,6 @@ body {
     font-family: sans-serif;
 }
 
-.login-form {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .header {
     background: #373a3c;
     height: 54px;
@@ -80,7 +69,34 @@ body {
     transition-duration: 0.4s;
 }
 
+.signin-form {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .login-form__actions {
     display: flex;
     justify-content: center;
+}
+
+.login-row {
+    margin-top: 5px;
+}
+
+.login-row__labael {
+    width: 200px;
+}
+
+.with-oauth2 {
+    margin-top: 50px;
+}
+
+.login-image {
+    width: 32px;
 }

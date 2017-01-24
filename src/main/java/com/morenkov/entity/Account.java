@@ -16,36 +16,37 @@ import java.util.Set;
  */
 @Data
 @ToString(exclude = "password")
-public class Employee {
+public class Account {
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @Id
     private String id;
+    private String username;
     private String firstName;
     private String lastName;
     private Set<String> roles;
-    private String manager;
     @JsonIgnore
     private String password;
     @JsonIgnore
     private Long version;
 
-    private Employee() {
+    private Account() {
     }
 
-    public Employee(String firstName, String lastName, String password) {
+    public Account(String username, String firstName, String lastName, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.setPassword(password);
-        roles = new HashSet<>();
+        this.roles = new HashSet<>();
+        this.username = username;
         roles.add("ROLE_USER");
     }
 
-    public Employee(String firstName, String lastName, Set<String> roles, String manager, String password) {
+    public Account(String username, String firstName, String lastName, Set<String> roles, String password) {
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = roles;
-        this.manager = manager;
         this.setPassword(password);
     }
 
